@@ -1,0 +1,57 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(CompletedApps)", "..\Users\ali\CompletedApps", "{F97CC0A0-3F4F-6F04-71BE-A4F3DD660C0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(Halo)", "..\Users\ali\CompletedApps\Halo", "{81CBD2E4-1C32-1337-0AE1-D538C8CD92DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(Users)", "..\Users", "{83FD2216-DE8C-3729-D4EA-3618B14F3F2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(ali)", "..\Users\ali", "{AF754D5D-0E23-27D9-57FB-EB362464FE5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(node-addon-api)", "..\Users\ali\CompletedApps\Halo\server\utils\node_modules\node-addon-api", "{020FF862-538E-1F45-E7C0-5698326E91E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(node_modules)", "..\Users\ali\CompletedApps\Halo\server\utils\node_modules", "{786E8697-A1AE-5BA6-AEE1-2DF08FB17427}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(server)", "..\Users\ali\CompletedApps\Halo\server", "{5E1559A8-2BF4-3794-89FD-443BB332D09D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(src)", "..\Users\ali\CompletedApps\Halo\server\utils\node_modules\node-addon-api\src", "{CA8E094C-B21A-8C05-AB6C-245112698CA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(utils)", "..\Users\ali\CompletedApps\Halo\server\utils", "{895CAD48-7255-8B50-A26B-AD960A0B2E92}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nothing", "..\node_modules\node-addon-api\src\nothing.vcxproj", "{75B33D3B-9469-285A-0F3D-2F203C36F762}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utils", "utils.vcxproj", "{764F194E-2321-8994-0D01-63E13762A467}"
+	ProjectSection(ProjectDependencies) = postProject
+		{75B33D3B-9469-285A-0F3D-2F203C36F762} = {75B33D3B-9469-285A-0F3D-2F203C36F762}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75B33D3B-9469-285A-0F3D-2F203C36F762}.Debug|x64.ActiveCfg = Debug|x64
+		{75B33D3B-9469-285A-0F3D-2F203C36F762}.Debug|x64.Build.0 = Debug|x64
+		{75B33D3B-9469-285A-0F3D-2F203C36F762}.Release|x64.ActiveCfg = Release|x64
+		{75B33D3B-9469-285A-0F3D-2F203C36F762}.Release|x64.Build.0 = Release|x64
+		{764F194E-2321-8994-0D01-63E13762A467}.Debug|x64.ActiveCfg = Debug|x64
+		{764F194E-2321-8994-0D01-63E13762A467}.Debug|x64.Build.0 = Debug|x64
+		{764F194E-2321-8994-0D01-63E13762A467}.Release|x64.ActiveCfg = Release|x64
+		{764F194E-2321-8994-0D01-63E13762A467}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{81CBD2E4-1C32-1337-0AE1-D538C8CD92DD} = {F97CC0A0-3F4F-6F04-71BE-A4F3DD660C0B}
+		{5E1559A8-2BF4-3794-89FD-443BB332D09D} = {81CBD2E4-1C32-1337-0AE1-D538C8CD92DD}
+		{AF754D5D-0E23-27D9-57FB-EB362464FE5F} = {83FD2216-DE8C-3729-D4EA-3618B14F3F2D}
+		{F97CC0A0-3F4F-6F04-71BE-A4F3DD660C0B} = {AF754D5D-0E23-27D9-57FB-EB362464FE5F}
+		{CA8E094C-B21A-8C05-AB6C-245112698CA1} = {020FF862-538E-1F45-E7C0-5698326E91E0}
+		{020FF862-538E-1F45-E7C0-5698326E91E0} = {786E8697-A1AE-5BA6-AEE1-2DF08FB17427}
+		{895CAD48-7255-8B50-A26B-AD960A0B2E92} = {5E1559A8-2BF4-3794-89FD-443BB332D09D}
+		{75B33D3B-9469-285A-0F3D-2F203C36F762} = {CA8E094C-B21A-8C05-AB6C-245112698CA1}
+		{786E8697-A1AE-5BA6-AEE1-2DF08FB17427} = {895CAD48-7255-8B50-A26B-AD960A0B2E92}
+	EndGlobalSection
+EndGlobal

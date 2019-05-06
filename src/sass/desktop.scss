@@ -1,0 +1,77 @@
+@import './config.scss';
+@import './mixins.scss';
+
+@media(min-width: 1092px) {
+    .container {
+        display: grid;
+        grid-template-columns: 20% 80%;
+    }
+
+    .route-container {
+        grid-column: 2/2;
+    }
+
+    .mobile-icon {
+        display: none;
+    }
+
+    .navbar {
+        grid-column: 1/1;
+        flex-basis: unset;
+        width: 15%;
+    }
+
+    .navbar > .link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navbar > .link:last-child {
+        margin-top: -5px;
+    }
+
+    .navbar > .link > svg {
+        height: 50px;
+        width: 100px;
+    }
+
+    #login-container > .login-container-image {
+        height: 175px;
+        width: 175px;
+        margin-bottom: -75px;
+    }
+
+    #login-container {
+        margin-left: 20%;
+        margin-right: unset;
+    }
+    
+    #login-container > .login-header {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 70px;
+        color: #ffffff;
+        margin-bottom: -10px;
+    }
+    
+    #login-container > .register-container-image {
+        height: 150px;
+        width: 150px;
+        margin-bottom: -75px;
+    }
+    
+    #login-container > .register-header {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 48px;
+        color: #ffffff;
+        margin-bottom: -10px;
+    }
+
+    #user-avatar {
+        padding: 10px;
+        height: 25%;
+        width: 85%;
+        border-radius: 50%;
+    }
+
+}

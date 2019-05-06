@@ -1,0 +1,30 @@
+
+///Mixins are css functions meant for responsive website returning cross platform selectors.
+@mixin transform($transform) {
+    transform: $transform;
+    -ms-transform: $transform;
+    -webkit-transform: $transform;
+}
+
+
+//For box-sizing set how the height and width of the box modal
+//content-box is the default behavior setting the content according to height and widht
+//border-box also includes borders and padding for height and width
+@mixin box-sizing($boxSizing) {
+    box-sizing: $boxSizing;
+    -webkit-box-sizing: $boxSizing;
+    -moz-box-sizing: $boxSizing;
+}
+
+//Define flexDirection mixin applied to flex properties on different browsers
+@mixin flexDirection($flexDir) {
+    flex-direction: $flexDir;
+    -ms-flex-direction: $flexDir;
+}
+
+//Define the filter mixin applies graphical effects to images.
+@mixin filter($filt) {
+    filter: $filt;
+    -ms-filter: $filt;
+    -webkit-filter: $filt;
+}

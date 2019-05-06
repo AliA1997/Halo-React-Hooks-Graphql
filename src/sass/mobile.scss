@@ -1,0 +1,102 @@
+@import './config.scss';
+@import './mixins.scss';
+
+.mobile-icon {
+    margin-left: auto;
+    margin-right: auto;
+    height: 60px !important;
+    width: 60px !important; 
+}
+
+.navbar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: -9px;
+    margin-left: -15px;
+    background: $backgroundColor;
+}
+
+.navbar > .link {
+    border: solid 2px $white;
+    display: inherit;
+    flex-direction: row;
+    justify-content: space-around;
+    align-self: center;
+    width: 80%;
+    margin: 20px;
+}
+
+.navbar > .link > svg {
+    font-size: 30px;
+    margin-top: 20px;
+}
+
+.navbar > .link > .mobile-text {
+    font-size: 20px;
+}
+
+#user-avatar {
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    border: 3px dashed $white;
+}
+
+#login-container {
+    margin-top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    width: 400px;
+    background: $horizontalBackgroundColor;
+    box-shadow: 0.25px 0.25 0.25px 0.25px $black;
+    padding: 10px;
+}
+
+#login-container > .login-header {
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 1.25px;
+    padding-left: 50px;
+    align-self: flex-start;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+#login-container > .register-form-label {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding-left: 50px;
+    align-self: flex-start;
+}
+
+
+
+.button-group {
+    width: 60%;
+    display: inherit;
+    flex-direction: row;
+    padding-bottom: 10px;
+    justify-content: space-around;
+}
+
+.button-group > .btn {
+    padding: 10px;
+    font-size: 14px;
+}
+
+
+
+
+.new-post-container {
+    margin-left: auto;
+    margin-right: auto;
+    background: $white;
+}

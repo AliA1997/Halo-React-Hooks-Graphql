@@ -1,0 +1,38 @@
+@import './mixins.scss';
+@import './config.scss';
+
+@media(min-width: 560px) {
+    .mobile-icon {
+        display: none;
+    }
+    
+    .navbar {
+        justify-content: center;
+        align-items: center;
+        flex-basis: 30%;
+        width: unset;
+        height: 100%;
+        padding-left: unset;
+        padding-right: unset;
+        margin-top: -10px;
+        margin-left: -10px;
+        background: $bottombackgroundColor;
+    }
+    
+    .navbar > .link {
+        border: unset;
+    }
+    
+    .navbar > .link > svg {
+        font-size: 50px;
+        margin-top: 20px;
+    }
+    
+    .navbar > .link > .mobile-text {
+        display: none;
+    }
+
+    .navbar > .link:last-child {
+        margin-top: 150px;
+    }
+}
