@@ -49,6 +49,8 @@ const typeDefs = gql`
         getAllPosts: [PostItem]
         getPost(id: String): Post
         getPosts(userId: String): [PostItem]
+        searchPosts(searchVal: String): [PostItem]
+        searchUserPosts(searchVal: String, userId: String): [PostItem]
     }
     
     type Mutation {

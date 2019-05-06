@@ -46,8 +46,8 @@ class CommentApi {
     }
 
     getComments(postId) {
-        //Set your fetch policy to network and cache to retrieve data via api request first and update cache
-        return this.client.query({query: getCommentsQuery, variables: { postId: postId }, fetchPolicy: 'network-and-cache'});
+        //Set your fetch policy to cache and network  to retrieve data via api request first and update cache
+        return this.client.query({query: getCommentsQuery, variables: { postId: postId }, fetchPolicy: 'cache-and-network'});
     }
 
     getCommentsOffline(postId) {

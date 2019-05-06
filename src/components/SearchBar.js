@@ -11,19 +11,21 @@ const SearchBar = ({client, searchFunc}) => {
     }
 
     return (
-        <div className="white-subcontainer">
-            <input value={searchValue} onChange={e => handleChange(e.target.value)}/>
-            <button className="btn" onClick={e => searchFunc(e, searchValue, client)}>
-                {utils.Icon('search')}
-                {
-                    searchValue.length ? 
-                        "Reset"
-                        : "Search"
-                }
-            </button>
-            <div>
+        <div className="white-subcontainer search-container">
+            <div className="search-subcontainer">
+                <input className='search-input' value={searchValue} onChange={e => handleChange(e.target.value)} placeholder="Search Value....."/>
+                <button className="btn search-btn" onClick={e => searchFunc(e, searchValue, client)}>
+                    {utils.Icon('search')}
+                    {
+                        searchValue.length ? 
+                            "Reset"
+                            : "Search"
+                    }
+                </button>
+            </div>
+            <div className="checkbox-div">
                 <label>My Posts</label>
-                <input id="my-posts-checkbox" type="checkbox" onChange={(e) => handleChange(e.target.value)} value="My Posts"/>
+                <input id="my-posts-checkbox" type="checkbox" onChange={(e) => handleChange(e.target.value)} />
             </div>
         </div>
     );

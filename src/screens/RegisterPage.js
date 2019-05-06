@@ -59,7 +59,7 @@ const Register = (props) => {
     useEffect(() => {
         if(ref) 
             cancelAnimationFrame(ref.current);
-    })
+    }, null)
 
     return (
         <ApolloConsumer>

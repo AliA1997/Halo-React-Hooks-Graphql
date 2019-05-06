@@ -61,8 +61,8 @@ class UserApi {
     }
 
     getAllUsers() {
-        //Set your fetch policy to network and cache to retrieve results from your api if the results are different update your cache as well.
-        return this.client.query({ query: getAllUsersQuery, fetchPolicy: 'network-and-cache' });
+        //Set your fetch policy to cache and network to retrieve results from your api if the results are different update your cache as well.
+        return this.client.query({ query: getAllUsersQuery, fetchPolicy: 'cache-and-network' });
     }
 
     getAllUsersOffline() {
@@ -71,8 +71,8 @@ class UserApi {
     }
 
     getSingleUser(userId) {
-        //Set your fetchPolicy to network and cache to retrieve result from your api if the results are different then update your cache as well.
-        return this.client.query({ query: getSingleUserQuery, variables: { userId: userId }, fetchPolicy: 'network-and-cache'});
+        //Set your fetchPolicy to cache and network to retrieve result from your api if the results are different then update your cache as well.
+        return this.client.query({ query: getSingleUserQuery, variables: { userId: userId }, fetchPolicy: 'cache-and-network'});
     }
 
     getSingleUserOffline(userId) {

@@ -23,6 +23,28 @@ const getUserPostsQuery = gql`
     }
 `;
 
+const searchPostsQuery = gql`
+    query SearchPosts($searchVal: String) {
+        searchPosts(searchVal: $searchVal) {
+            id
+            title
+            image
+            dateCreated
+        }
+    }
+`;
+
+const searchUserPostsQuery = gql`
+    query SearchUserPosts($searchVal: String, $userId: String) {
+        searchUserPosts(searchVal: $searchVal, userId: $userId) {
+            id
+            title
+            image
+            dateCreated
+        }
+    }
+`;
+
 const getSinglePostQuery = gql`
     query GetSinglePost($postId: String) {
         getPost(id: $postId) {
@@ -71,8 +93,8 @@ class Post {
     }
 
     getAllPosts() {
-        //Set your fetch policy to network and cache rather than cache-first that retrieve data via api request, and if the data is different update's cache.
-        return this.client.query({query: getPostsQuery, fetchPolicy: 'network-and-cache'});
+        //Set your fetch policy to cache and network rather than cache-first that retrieve data via api request, and if the data is different update's cache.
+        return this.client.query({query: getPostsQuery, fetchPolicy: 'cache-and-network'});
     }
 
     getAllPostsOffline() {
@@ -80,9 +102,25 @@ class Post {
         return this.client.query({query: getPostsQuery, fetchPolicy: 'cache-only'});
     }
 
+    searchPosts(searchVal) {
+        return this.client.query({query: searchPostsQuery, variables: { searchVal }, fetchPolicy: 'cache-and-network'});
+    }
+
+    searchPostsOffline(searchVal) {
+        return this.client.query({query: searchPostsQuery, variables: { searchVal }, fetchPolicy: 'cache-only'});
+    }
+
+    searchUserPosts(userId, searchVal) {
+        return this.client.query({query: searchUserPostsQuery, variables: { searchVal, userId }, fetchPolicy: 'cache-and-network'});
+    }
+
+    searchUserPostsOffline(userId, searchVal) {
+        return this.client.query({query: searchUserPostsQuery, variables: { searchVal, userId }, fetchPolicy: 'cache-only'});
+    }
+
     getUserPosts(userId) {
-        //Set the fetch policy to network and cache to retrieve data via api request and when the data is different then will update cache
-        return this.client.query({query: getUserPostsQuery, variables: { userId: userId }, fetchPolicy: 'network-and-cache'});
+        //Set the fetch policy to cache and network to retrieve data via api request and when the data is different then will update cache
+        return this.client.query({query: getUserPostsQuery, variables: { userId: userId }, fetchPolicy: 'cache-and-network'});
     }
 
     getUserPostsOffline(userId) {
@@ -92,7 +130,7 @@ class Post {
 
     getPost(postId) {
         //Get the data from the api first and if the data is different then update the cache
-        return this.client.query({query: getSinglePostQuery, variables: { postId: postId }, fetchPolicy: 'network-and-cache'});
+        return this.client.query({query: getSinglePostQuery, variables: { postId: postId }, fetchPolicy: 'cache-and-network'});
     }
 
     getPostOffline(postId) {

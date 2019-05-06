@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 const PostItem = ({history, id, title, image, dateCreated}) => {
     return (
-        <div>
-
+        <div className='post-item' onClick={() => history.push(`/posts/${id}`)}>
+            <h1>{title}</h1>
         </div>
     );
 };

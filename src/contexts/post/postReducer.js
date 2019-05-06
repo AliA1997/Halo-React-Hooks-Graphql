@@ -3,8 +3,6 @@ import initialState from './postInitialState';
 import * as PostActionTypes from './postActionTypes';
 import * as utils from '../../utils';
 
-//Define your context initial state.
-export const PostContext = React.createContext(initialState);
 
 export const PostReducer = (state=initialState, action) => {
     switch(action.type) {
@@ -39,3 +37,6 @@ export const PostReducer = (state=initialState, action) => {
             return state;
     }
 }
+
+//Define your context initial state.
+export const PostContext = React.createContext(initialState, PostReducer);

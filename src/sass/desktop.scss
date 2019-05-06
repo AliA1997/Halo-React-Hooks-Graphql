@@ -74,4 +74,60 @@
         border-radius: 50%;
     }
 
+    .white-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        background: $white;
+        width: 90%;
+        padding: 10px;
+    }
+
+    .white-subcontainer {
+        display: flex;
+        align-items: center;
+        background: $white;
+        border: 1px solid $white;
+        height: 20px;
+        margin-bottom: 10px;
+    }
+
+    .search-container {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 5px;
+        width: 80%;
+    }
+
+    .search-subcontainer {
+        width: 100%;
+    }
+
+    .search-subcontainer > .search-input {
+        border-radius: unset;
+        width: 80%;
+    }
+
+    .search-subcontainer > .search-input::placeholder {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .checkbox-div {
+        margin-left: -20px;
+        width: 20%;
+    }
+
+    .checkbox-div > label {
+        width: 80%;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .checkbox-div > #my-posts-checkbox {
+        width: 10%;
+        height: unset;
+    }
+
 }

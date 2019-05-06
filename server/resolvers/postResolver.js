@@ -67,6 +67,46 @@ module.exports = {
                 });
 
         },
+
+        searchPosts: (_, args, context) => {
+            let postsToReturn;
+            const searchValue = args.searchValue,
+                  db = context.db;
+
+            return db.collection('posts').orderBy('title').startAt(searchValue).endAt(searchValue+'\uf8ff').get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(docRef => {
+                        const post = docRef.data();
+
+                        postsToReturn.push(new PostItem(docRef.id, post.title, post.image, post.dateCreated));
+                    });
+
+                    return postsToReturn;
+                });
+
+
+        },
+
+        searchUserPosts: (_, args, context) => {
+            let postsToReturn;
+            const searchValue = args.searchValue,
+                  userId = args.userId,
+                  db = context.db;
+
+            return db.collection('posts').where('userId', '==', userId).orderBy('title').startAt(searchValue).endAt(searchValue+'\uf8ff').get()
+                .then(querySnapshot => {
+                    
+                    querySnapshot.forEach(docRef => {
+                        const post = docRef.data();
+
+                        postsToReturn.push(new PostItem(docRef.id, post.title, post.image, post.dateCreated));
+                    })
+
+                    return postsToReturn;
+
+                });
+        }
+
     },
     
     Mutation: {
