@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 
 const getPostsQuery = gql`
     query {
-        getAllPosts {
+        posts:getAllPosts {
             id
             title
             image
@@ -94,7 +94,7 @@ class Post {
 
     getAllPosts() {
         //Set your fetch policy to cache and network rather than cache-first that retrieve data via api request, and if the data is different update's cache.
-        return this.client.query({query: getPostsQuery, fetchPolicy: 'cache-and-network'});
+        return this.client.watchQuery({query: getPostsQuery, fetchPolicy: 'cache-and-network'})
     }
 
     getAllPostsOffline() {
@@ -103,7 +103,7 @@ class Post {
     }
 
     searchPosts(searchVal) {
-        return this.client.query({query: searchPostsQuery, variables: { searchVal }, fetchPolicy: 'cache-and-network'});
+        return this.client.watchQuery({query: searchPostsQuery, variables: { searchVal }, fetchPolicy: 'cache-and-network'});
     }
 
     searchPostsOffline(searchVal) {
@@ -111,7 +111,7 @@ class Post {
     }
 
     searchUserPosts(userId, searchVal) {
-        return this.client.query({query: searchUserPostsQuery, variables: { searchVal, userId }, fetchPolicy: 'cache-and-network'});
+        return this.client.watchQuery({query: searchUserPostsQuery, variables: { searchVal, userId }, fetchPolicy: 'cache-and-network'});
     }
 
     searchUserPostsOffline(userId, searchVal) {
@@ -120,7 +120,7 @@ class Post {
 
     getUserPosts(userId) {
         //Set the fetch policy to cache and network to retrieve data via api request and when the data is different then will update cache
-        return this.client.query({query: getUserPostsQuery, variables: { userId: userId }, fetchPolicy: 'cache-and-network'});
+        return this.client.watchQuery({query: getUserPostsQuery, variables: { userId: userId }, fetchPolicy: 'cache-and-network'});
     }
 
     getUserPostsOffline(userId) {
@@ -130,7 +130,7 @@ class Post {
 
     getPost(postId) {
         //Get the data from the api first and if the data is different then update the cache
-        return this.client.query({query: getSinglePostQuery, variables: { postId: postId }, fetchPolicy: 'cache-and-network'});
+        return this.client.watchQuery({query: getSinglePostQuery, variables: { postId: postId }, fetchPolicy: 'cache-and-network'});
     }
 
     getPostOffline(postId) {

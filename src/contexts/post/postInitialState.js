@@ -1,4 +1,4 @@
-const initialState = {
+export default {
     currentPost: null,
     posts: []
 }

@@ -3,8 +3,7 @@ import { ApolloConsumer } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 //import your context and reducer for that context.
-import { UserContext, UserReducer } from '../contexts/user/userReducer';
-import userInitState from '../contexts/user/userInitialState';
+import { UserContext } from '../contexts/user/userReducer';
 import * as UserActionTypes from '../contexts/user/userActionTypes';
 import * as utils from '../utils';
 import UserApi from '../api/users/userApi';
@@ -17,8 +16,7 @@ const Register = (props) => {
     const ref = useRef();
 
     //Use your context via use Context, and use the context reducer, also use useMemo to prevent unnecessary dom updates
-    const [userState, dispatch] = useReducer(UserReducer, userInitState);
-    const userValues = useContext(UserContext);
+    const { state, dispatch } = useContext(UserContext);
 
     const [registerForm, setRegisterForm] = useState({
                                                 username: '',

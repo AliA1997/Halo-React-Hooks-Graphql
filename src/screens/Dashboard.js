@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 import { ApolloConsumer } from 'react-apollo';
 import { PostContext } from '../contexts/post/postReducer';
+import { UserContext } from '../contexts/user/userReducer';
 import * as ActionTypes from '../contexts/post/postActionTypes';
 import SearchBar from '../components/SearchBar';
 import LoadingScreen from '../components/LoadingScreen';
@@ -13,9 +14,10 @@ const Dashboard = ({history}) => {
 
     const ref = useRef();
 
-    const context = useContext(PostContext);
+    const {state, dispatch}= useContext(PostContext);
 
-    alert(JSON.stringify(context));
+    const userContext = useContext(UserContext);
+
 
     async function search(e, searchVal, client) {
         e.stopPropagation();
@@ -27,15 +29,15 @@ const Dashboard = ({history}) => {
             if(searchVal && !retrieveMyPosts)
                 postsToRetrieve = navigator.onLine ? await new postsApi(client).searchPosts(searchVal) : await new postsApi(client).searchPostsOffline(searchVal)
             else if(searchVal && retrieveMyPosts)
-                postsToRetrieve = navigator.onLine ? await new postsApi(client).searchUserPosts(state.currentUser.id, searchVal) : await new postsApi(client).searchUserPostsOffline(searchVal);
+                postsToRetrieve = navigator.onLine ? await new postsApi(client).searchUserPosts(userContext.state.currentUser.id, searchVal) : await new postsApi(client).searchUserPostsOffline(searchVal);
             else if(!searchVal && retrieveMyPosts)
-                postsToRetrieve = navigator.onLine ? await new postsApi(client).getUserPosts(state.currentUser.id) : await new postsApi(client).getUserPostsOffline(state.currentUser.id);
+                postsToRetrieve = navigator.onLine ? await new postsApi(client).getUserPosts(userContext.state.currentUser.id) : await new postsApi(client).getUserPostsOffline(userContext.state.currentUser.id);
             else if(!searchVal && !retrieveMyPosts)
                 postsToRetrieve = navigator.onLine ? await new postsApi(client).getAllPosts() : await new postsApi(client).getAllPostsOffline();
 
-                console.log('posts---------------', postsToRetrieve);
+                // console.log('posts---------------', postsToRetrieve);
 
-            // dispatch({type: ActionTypes.GET_POSTS, posts: postsToRetrieve});
+            dispatch({type: ActionTypes.GET_POSTS, posts: postsToRetrieve});
 
             
         } catch(error) {
@@ -44,23 +46,25 @@ const Dashboard = ({history}) => {
         }
     }
 
-    async function getInitialPosts(client) {
-        
-        let postsToRetrieve;
-        
+    async function getInitialPosts(client) {       
         try {
-            postsToRetrieve = navigator.onLine ? await new postsApi(client).getAllPosts() : await new postsApi(client).getAllPostsOffline();
+            const subscriber = navigator.onLine ? await new postsApi(client).getAllPosts() : await new postsApi(client).getAllPostsOffline();
 
-            dispatch({tyep: ActionTypes.GET_POSTS, posts: postsToRetrieve});
+            return subscriber.subscribe(({data}) => {
+                if(data)
+                    dispatch({type: ActionTypes.GET_POSTS, posts: data.posts});
+            })
+
         } catch(error) {
+            console.log('error------------', error);
             if(typeof error !== 'object')
                 toast.error(error, { position: toast.POSITION.TOP_RIGHT });
         }
     }
 
-    // useEffect(() => {
-    //     cancelAnimationFrame(ref.current);
-    // }, null)
+    useEffect(() => {
+        cancelAnimationFrame(ref.current);
+    }, null)
 
     return (
         <ApolloConsumer>
@@ -70,14 +74,14 @@ const Dashboard = ({history}) => {
                     getInitialPosts(client);
 
                     return (
-                        <div class="white-container">
+                        <div className="white-container">
                             <SearchBar client={client} searchFunc={search} />
                             <div className='white-subcontainer'>
-                                {/* {
+                                {
                                     state.posts.length ?
                                     state.posts.map(post => <PostItem key={post.id} {...post} history={history}/>)
                                     : null
-                                } */}
+                                }
                             </div>
                         </div>
                     );

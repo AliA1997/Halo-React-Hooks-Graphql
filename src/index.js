@@ -1,10 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router } from 'react-router-dom';
+import UserProvider from './contexts/user/UserProvider';
+import PostProvider from './contexts/post/PostProvider';
+import CommentProvider from './contexts/comment/CommentProvider';
 import { createBrowserHistory } from 'history';
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import UserProvider from './contexts/user/UserProvider';
 import App from './App';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHotel, faFileAlt, faSignInAlt, faCommentAlt, faWindowClose, faPlusCircle, faUserCog, faUserCheck, faPowerOff, faBars, faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -24,7 +26,11 @@ const history = createBrowserHistory();
 render(<ApolloProvider client={client}>
             <Router history={history}>
                 <UserProvider>
-                    <App />
+                    <PostProvider>
+                        <CommentProvider>
+                            <App /> 
+                        </CommentProvider>
+                    </PostProvider>
                 </UserProvider>
             </Router>
         </ApolloProvider>, document.getElementById("root"));

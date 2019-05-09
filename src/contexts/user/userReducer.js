@@ -1,19 +1,19 @@
 import React from 'react';
-import initialState from './userInitialState';
 import * as UserActionTypes from './userActionTypes';
 import * as utils from '../../utils';
+import userInitialState from './userInitialState';
 
 
-export const UserReducer = (state=initialState, action) => {
+export const UserReducer = (state=userInitialState, action) => {
     switch(action.type) {
         case UserActionTypes.LOGIN:
             return utils.deepCopy({
-                ...initialState,
+                ...state,
                 ...{ currentUser: action.loggedInUser }
             });
         case UserActionTypes.LOGOUT:
             return utils.deepCopy({
-                ...initialState,
+                ...state,
                 ...{ currentUser: null }
             });
         default:
@@ -22,4 +22,4 @@ export const UserReducer = (state=initialState, action) => {
 }
 
 //Define your context initial state.
-export const UserContext = React.createContext(initialState, UserReducer);
+export const UserContext = React.createContext(userInitialState, UserReducer);

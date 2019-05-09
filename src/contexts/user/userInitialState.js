@@ -1,5 +1,3 @@
-const initialState = {
+export default {
     currentUser: null
 }
-
-export default initialState;

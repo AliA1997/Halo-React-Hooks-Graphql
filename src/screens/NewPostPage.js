@@ -78,7 +78,7 @@ const NewPostPage = (props) => {
                                 <input value={setNewPostForm.title} onChange={e => handleChange(e, 'title')} />
                             </div>
                             <img src={setNewPostForm.image || 'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'} className="new-post-image" />
-                            <div class="input-group">
+                            <div className="input-group">
                                 <label>Post Image</label>
                                 <input value={setNewPostForm.image} onChange={e => handleChange(e, 'image')}/>
                             </div>

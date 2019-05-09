@@ -1,0 +1,2 @@
+export const GET_COMMENTS = 'GET_COMMENTS';
+export const CREATE_COMMENTS = 'CREATE_COMMENTS';
