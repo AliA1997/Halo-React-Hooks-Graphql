@@ -21,19 +21,26 @@
         width: 15%;
     }
 
-    .navbar > .link {
+    .navbar > ul > li > .link {
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .navbar > .link:last-child {
+    .navbar > ul > li > .link:last-child {
         margin-top: -5px;
     }
 
-    .navbar > .link > svg {
+    .navbar > ul > li > .link > svg {
         height: 50px;
         width: 100px;
+    }
+
+    #user-avatar {
+        height: 100px;
+        width: 100px;
+        border-radius: 50px;
+        border: 3px dashed $white;
     }
 
     #login-container > .login-container-image {
@@ -84,8 +91,6 @@
     }
 
     .white-subcontainer {
-        display: flex;
-        align-items: center;
         background: $white;
         border: 1px solid $white;
         height: 20px;

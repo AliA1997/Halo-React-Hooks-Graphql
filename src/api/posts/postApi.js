@@ -1,58 +1,48 @@
 import gql from 'graphql-tag';
-
+import * as utils from '../../utils';
 
 const getPostsQuery = gql`
+    ${utils.fragments.post}
     query {
         posts:getAllPosts {
-            id
-            title
-            image
-            dateCreated
+            ...postItemFields
         }
     }
 `;
 
 const getUserPostsQuery = gql`
+    ${utils.fragments.post}
     query GetUserPosts($userId: String) {
         getUserPosts(userId: $userId) {
-            id
-            title
-            image
-            dateCreated
+            ...postItemFields
         }
     }
 `;
 
 const searchPostsQuery = gql`
+    ${utils.fragments.post}
     query SearchPosts($searchVal: String) {
         searchPosts(searchVal: $searchVal) {
-            id
-            title
-            image
-            dateCreated
+            ...postItemFields
         }
     }
 `;
 
 const searchUserPostsQuery = gql`
+    ${utils.fragments.post}
     query SearchUserPosts($searchVal: String, $userId: String) {
         searchUserPosts(searchVal: $searchVal, userId: $userId) {
-            id
-            title
-            image
-            dateCreated
+            ...postItemFields
         }
     }
 `;
 
 const getSinglePostQuery = gql`
+    ${utils.fragments.post}
     query GetSinglePost($postId: String) {
-        getPost(id: $postId) {
-            id
-            title
-            image
+        post:getPost(id: $postId) {
+            ...postItemFields
             tags
-            dateCreated
             deletedInd
             permanentlyDeletedInd    
         }
@@ -94,7 +84,7 @@ class Post {
 
     getAllPosts() {
         //Set your fetch policy to cache and network rather than cache-first that retrieve data via api request, and if the data is different update's cache.
-        return this.client.watchQuery({query: getPostsQuery, fetchPolicy: 'cache-and-network'})
+        return this.client.watchQuery({query: getPostsQuery, fetchPolicy: 'cache-and-network'});
     }
 
     getAllPostsOffline() {

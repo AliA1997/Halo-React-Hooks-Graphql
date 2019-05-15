@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { Segment, Input, Icon, Button, Divider, Checkbox } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import * as utils from '../utils';
+import _ from 'lodash';
 
-const SearchBar = ({client, searchFunc}) => {
+const SearchBar = ({client, searchFunc, type}) => {
     const [ searchValue, setSearchValue ] = useState("");
 
 
@@ -11,28 +12,28 @@ const SearchBar = ({client, searchFunc}) => {
     }
 
     return (
-        <div className="white-subcontainer search-container">
-            <div className="search-subcontainer">
-                <input className='search-input' value={searchValue} onChange={e => handleChange(e.target.value)} placeholder="Search Value....."/>
-                <button className="btn search-btn" onClick={e => searchFunc(e, searchValue, client)}>
-                    {utils.Icon('search')}
-                    {
-                        searchValue.length ? 
-                            "Reset"
-                            : "Search"
-                    }
-                </button>
-            </div>
-            <div className="checkbox-div">
-                <label>My Posts</label>
-                <input id="my-posts-checkbox" type="checkbox" onChange={(e) => handleChange(e.target.value)} />
-            </div>
-        </div>
+        <Segment>
+            
+            <Segment.Inline>
+                <Input value={searchValue} onChange={e => handleChange(e.target.value)} placeholder={`Search ${_.capitalize(type)}.....`} />
+                
+                <Button onClick={e => searchFunc(e, searchValue, client)}>
+                    <Icon name="search" size="large" />
+                </Button>
+                {
+                    type === 'posts' ?
+                    <Checkbox label="My Posts" onChange={(e) => handleChange(e.target.value)} />
+                    : null
+                }
+            </Segment.Inline>
+  
+        </Segment>
     );
 };
 
 SearchBar.propTypes = {
     searchFunc: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
     client: PropTypes.object
 }
 

@@ -3,6 +3,8 @@ import LoginScreen from './screens/LoginPage';
 import Dashboard from './screens/Dashboard';
 import RegisterPage from './screens/RegisterPage';
 import PostPage from './screens/PostPage';
+import UsersPage from './screens/UsersPage';
+import UserPage from './screens/UserPage';
 import NewPostPage from './screens/NewPostPage';
 import * as utils from './utils';
 
@@ -33,7 +35,7 @@ const Routes = [
     },
     {
         exact: false,
-        route: '/dashboard/:postId',
+        route: '/posts/:postId',
         routeName: 'Post',
         roles: [utils.Roles.LoggedInUser],
         icon: null,
@@ -46,6 +48,22 @@ const Routes = [
         roles: [utils.Roles.LoggedInUser],
         icon: 'doc',
         component: NewPostPage
+    },
+    {
+        exact: true,
+        route: '/users',
+        routeName: 'Search Users',
+        roles: [utils.Roles.LoggedInUser],
+        icon: 'srch-users',
+        component: UsersPage
+    },
+    {
+        exact: false,
+        route: '/users/:userId',
+        routeName: 'User',
+        roltes: [utils.Roles.LoggedInUser],
+        icon: null,
+        component: UserPage
     }
 ];
 

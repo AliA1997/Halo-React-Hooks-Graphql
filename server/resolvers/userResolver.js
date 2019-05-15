@@ -4,6 +4,7 @@ const User = require('../classes/users/User');
 const PasswordHasher = require('../classes/misc/PasswordHasher');
 //IMport firebase to query based on id using firebase.firestore.FieldBPath.documentId()
 const firebase = require('firebase');
+const resolverUtils = require('./resolverUtils');
 
 module.exports = {
     Query: {
@@ -25,7 +26,7 @@ module.exports = {
                             const user = userDoc.data();
 
 
-                            usersToReturn.push(new UserItem(userDoc.id, user.username, user.avatar));
+                            usersToReturn.push(new UserItem(userDoc.id, user.username, user.avatar, user.dateRegistered));
                         
                         });
                         //Your result will be a object that will require the use of the data method to retrieve data for that query.
@@ -35,11 +36,36 @@ module.exports = {
 
         },
 
+        searchUsers: (_, args, context) => {
+            let usersToReturn;
+            const searchVal = args.searchVal,
+                  db = context.db;
+
+            return db.collections('users').orderBy('username').startAt(searchVal).endAt(searchVal, '\uf8ff').get()
+                .then(querySnapshot => {
+                    
+                    querySnapshot.forEach(docRef => {
+
+                        const user = docRef.data();
+
+                        usersToReturn.push(new UserItem(docRef.id, user.username, user.avatar, user.dateRegistered));
+                    });
+
+                    return usersToReturn;
+                });
+        },
+
         getUser: (_, args, context) => {
             let userToReturn;
             const userId = args.id;
             const db = context.db;
-
+            
+            const socialMediaPlaceholder = {
+                facebook: '',
+                instagram: '',
+                linkedin: '',
+                twitter: ''
+            };
             //To query a single document use the doc method and pass your doc id, that will retrieve a single document.
             return db.collection('users').doc(userId).get()
                     .then((querySnapshot) => {
@@ -48,8 +74,10 @@ module.exports = {
                         const user = querySnapshot.data();                        
 
                         //Then define a new instance of the user
-                        userToReturn = new User(querySnapshot.id, user.username, user.password, user.avatar, user.age, user.dateRegistered);
-                    
+                        userToReturn = new User(querySnapshot.id, user.username, user.password, user.avatar, user.age, user.dateRegistered, [""], socialMediaPlaceholder);
+                        
+                        userToReturn.friends = [""];
+
                         //Return the user queried.
                         return userToReturn;
 
@@ -65,10 +93,12 @@ module.exports = {
             return db.collection('users').where('username', '==', username).get()
                 .then((querySnapshot) => {
                     let userInfo;
-                    
-                    if(querySnapshot.docs.length)
-                        userInfo = querySnapshot.docs[0].data();
 
+                    if(querySnapshot.docs.length) {
+                        userInfo = querySnapshot.docs[0].data();
+                        //Use resolverUtils to get Reference value object since it will timeout before the .then is completed.
+                        userInfo.socialMediaInfo = resolverUtils.getReferenceValue(userInfo, 'socialMedia');
+                    }
                     return userInfo || false;
                 })
                 .then(async resultToReturn => {
@@ -84,6 +114,8 @@ module.exports = {
                         throw new Error("Invalid password or username!");
 
                     session.user = resultToReturn;
+
+                    delete resultToReturn.socialMedia;
 
                     return resultToReturn;
                 });

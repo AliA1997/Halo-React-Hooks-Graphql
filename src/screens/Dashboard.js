@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useRef, useState, useReducer } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Container, Segment, Header, Button } from 'semantic-ui-react';
 import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
-import { ApolloConsumer } from 'react-apollo';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
 import { PostContext } from '../contexts/post/postReducer';
 import { UserContext } from '../contexts/user/userReducer';
 import * as ActionTypes from '../contexts/post/postActionTypes';
@@ -9,15 +11,30 @@ import SearchBar from '../components/SearchBar';
 import LoadingScreen from '../components/LoadingScreen';
 import PostItem from '../components/PostItem';
 import postsApi from '../api/posts/postApi';
+import * as utils from '../utils';
 
-const Dashboard = ({history}) => {
+const getPostsQuery = gql`
+    ${utils.fragments.post}
+    query {
+        posts:getAllPosts {
+            ...postItemFields
+        }
+    }
+`;
+
+const Dashboard = ({history, client}) => {
 
     const ref = useRef();
 
-    const {state, dispatch}= useContext(PostContext);
+    const {state, dispatch} = useContext(PostContext);
 
     const userContext = useContext(UserContext);
 
+    const userState = userContext.state;
+
+    console.log('userState-------------', userState);
+
+    const [ currentPosts, setPosts ] = useState([]);
 
     async function search(e, searchVal, client) {
         e.stopPropagation();
@@ -45,52 +62,41 @@ const Dashboard = ({history}) => {
                 toast.error(error, { position: toast.POSITION.TOP_RIGHT });
         }
     }
-
-    async function getInitialPosts(client) {       
-        try {
-            const subscriber = navigator.onLine ? await new postsApi(client).getAllPosts() : await new postsApi(client).getAllPostsOffline();
-
-            return subscriber.subscribe(({data}) => {
-                if(data)
-                    dispatch({type: ActionTypes.GET_POSTS, posts: data.posts});
-            })
-
-        } catch(error) {
-            console.log('error------------', error);
-            if(typeof error !== 'object')
-                toast.error(error, { position: toast.POSITION.TOP_RIGHT });
-        }
-    }
+    
 
     useEffect(() => {
         cancelAnimationFrame(ref.current);
     }, null)
 
     return (
-        <ApolloConsumer>
-            {client => {
-                if(client) {
-
-                    getInitialPosts(client);
-
+        <Query
+            query={getPostsQuery}
+        >
+            {(response) => {
+                if(response.data && response.data.posts) {
                     return (
-                        <div className="white-container">
-                            <SearchBar client={client} searchFunc={search} />
-                            <div className='white-subcontainer'>
-                                {
-                                    state.posts.length ?
-                                    state.posts.map(post => <PostItem key={post.id} {...post} history={history}/>)
-                                    : null
-                                }
-                            </div>
-                        </div>
+                        <Container>
+                            <Segment>
+                                <Header as="h2">{userState.currentUser.username} Dashboard</Header>
+                            </Segment>
+                            <SearchBar client={client} searchFunc={search} type="posts" />
+                            <Segment>
+                                <Container id="items-container">
+                                    {
+                                        state.posts.length ?
+                                        state.posts.map(post => <PostItem key={post.id} {...post} history={history}/>)
+                                        : response.data.posts.map(post => <PostItem key={post.id} {...post} history={history}/>)
+                                    }
+                                </Container>
+                            </Segment>
+                        </Container>
                     );
                 }
-
                 return <LoadingScreen />
             }}
-        </ApolloConsumer>
+        </Query>
     );
+    
 };
 
 export default withRouter(Dashboard);

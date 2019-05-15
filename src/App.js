@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import AuthenticatedWrapper from './AuthenticatedWrapper';
 import * as utils from './utils';
+import * as styles from './styles';
 
 export default class App extends Component {
     // componentDidMount() {
@@ -13,7 +14,7 @@ export default class App extends Component {
     // }
     render() {
         return (
-            <div className="container">
+            <div style={styles.container}>
                 <ToastContainer />
                 <AuthenticatedWrapper />
             </div>

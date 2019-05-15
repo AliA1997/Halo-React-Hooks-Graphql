@@ -5,8 +5,10 @@ import postInitialState from './postInitialState';
 
 
 export const PostReducer = (state=postInitialState, action) => {
+    console.log('action--------------', action);
     switch(action.type) {
         case PostActionTypes.GET_POSTS:
+            console.log('action---------------', action.posts);
             return utils.deepCopy({
                 ...state,
                 ...{
@@ -39,6 +41,6 @@ export const PostReducer = (state=postInitialState, action) => {
 }
 
 //Define your context initial state.
-export const PostContext = React.createContext(postInitialState, PostReducer);
+export const PostContext = React.createContext(postInitialState);
 
 

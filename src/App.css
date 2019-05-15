@@ -1,0 +1,23 @@
+@media (max-width: 560px) {
+    .items-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 760px) {
+    .items-container {
+        flex: 50% 50%;
+    }
+}
+
+@media (max-width: 1260px) {
+    .items-container {
+        flex: 33% 33% 33%;
+    }
+}
+
+#items-container {
+    display: flex;
+    flex-direction: row;
+    flex: 25% 25% 25% 25% !important;
+}

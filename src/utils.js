@@ -1,8 +1,15 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import { ApolloConsumer } from 'react-apollo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import searchUsersIcon from './searchUsersIcon.svg';
+import gql from 'graphql-tag';
 
 export const deepCopy = (obj) => {
+
+    if(obj === null || obj === undefined) {
+        return null;
+    }
     //Define the new object that will be returned.
     let newObj = {};
 
@@ -49,7 +56,14 @@ export function setTitleRoute(props) {
                 document.title = `Halo - ${routeName}`;
             //Then clone the element that clones the children.
             return (
-                React.cloneElement(props.children, props)
+                <ApolloConsumer>
+                    {client => {
+                        if(client) {
+                            const propsToPass = { ...props, ...{ client: client } }
+                            return React.cloneElement(props.children, propsToPass)
+                        }
+                    }}
+                </ApolloConsumer>
             )
         }}/>
     )
@@ -65,7 +79,7 @@ export function Icon(icon) {
 
     switch(icon) {
         case 'nav':
-            iconToReturn = <FontAwesomeIcon icon='bars' className="mobile-icon" />;
+            iconToReturn = <FontAwesomeIcon icon='bars' className="mobile-icon"  onClick={e => arguments[1](e)}/>;
             break;        
         case 'home':
             iconToReturn = <FontAwesomeIcon icon='hotel' />;
@@ -93,8 +107,44 @@ export function Icon(icon) {
             break;
         case 'search':
             iconToReturn = <FontAwesomeIcon icon="search" />;
+        case 'srch-users':
+            iconToReturn = <img src={searchUsersIcon} style={{height: '50px', width: '100px'}} />;
         default:   
             break;
     }
     return iconToReturn;
+}
+
+export const fragments = {
+    user: gql`
+        fragment userItemFields on UserItem {
+            __typename 
+            id
+            username
+            avatar
+            dateRegistered
+        }
+    `,
+    post: gql`
+        fragment postItemFields on PostItem {
+            __typename
+            id
+            title
+            image
+            dateCreated
+        }
+    `,
+    comment: gql`
+        fragment commentFields on Comment {
+            __typename
+            id
+            postId
+            username
+            body
+            dateCreated
+            dateUpdated
+            deletedInd
+            permanentlyDeletedInd
+        }
+    `,
 }

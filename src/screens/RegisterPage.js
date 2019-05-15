@@ -1,5 +1,5 @@
 import React, { useReducer, useContext, useState, useRef, useEffect } from 'react';
-import { ApolloConsumer } from 'react-apollo';
+import { Segment, Form, FormField, Input, Header, Button, Image } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 //import your context and reducer for that context.
@@ -7,11 +7,9 @@ import { UserContext } from '../contexts/user/userReducer';
 import * as UserActionTypes from '../contexts/user/userActionTypes';
 import * as utils from '../utils';
 import UserApi from '../api/users/userApi';
-import LoadingScreen from '../components/LoadingScreen';
-import haloLogo from '../halo-logo.svg';
 import dateFns from 'date-fns';
 
-const Register = (props) => {
+const Register = ({history, client}) => {
     //Define useRef for unmounting the component.
     const ref = useRef();
 
@@ -51,7 +49,7 @@ const Register = (props) => {
 
         toast.success('Successfully registered!', {position: toast.POSITION.TOP_RIGHT});
         
-        props.history.push('/dashboard');
+        history.push('/dashboard');
     }
 
     useEffect(() => {
@@ -59,33 +57,42 @@ const Register = (props) => {
             cancelAnimationFrame(ref.current);
     }, null)
 
-    return (
-        <ApolloConsumer>
-            {client => {
-                if(client) {
-                    return (
-                        <div id="login-container">
-                            <img src={haloLogo} className="register-container-image" />
-                            <h1 className="register-header"> Register</h1>
-                            <label className="register-form-label">Username</label>
-                            <input value={registerForm.username} onChange={(e) => handleChange(e, 'username')} placeholder="Username...."/>
-                            <label className="register-form-label">Password</label>
-                            <input value={registerForm.password} onChange={(e) => handleChange(e, 'password')} placeholder="Password...."/>
-                            <label className="register-form-label">Avatar</label>
-                            <input value={registerForm.avatar} onChange={(e) => handleChange(e, 'avatar')} placeholder="Avatar...."/>
-                            <label className="register-form-label">Age</label>
-                            <input value={registerForm.age} onChange={(e) => handleChange(e, 'age')} placeholder="Age...."/>
 
-                            <div className="button-group">
-                                <button className="btn" onClick={(e) => register(e, client)}>Register</button>
-                            </div>
-                        </div>
-                    );
-                }
-                return <LoadingScreen />
-            }}
-        </ApolloConsumer>
-    )
+
+    return (
+        <React.Fragment>
+
+            <Segment>
+                <Header as="h2"> Register</Header>
+            </Segment>
+
+            <Segment>
+                <Image src={registerForm.avatar || "https://liveoakinternational.com/wp-content/uploads/2015/12/placeholder-large.jpg"} circular={true} size="large"/> 
+                <Form onSubmit={async (e) => await register(e, client)}>
+                    <FormField>
+                        Avatar
+                        <Input value={registerForm.avatar} onChange={(e) => handleChange(e, 'avatar')} placeholder="Avatar...."/>
+                    </FormField>
+                    <FormField>
+                        Username
+                        <Input value={registerForm.username} onChange={(e) => handleChange(e, 'username')} placeholder="Username...."/>
+                    </FormField>
+                    <FormField>
+                        Password
+                        <Input value={registerForm.password} onChange={(e) => handleChange(e, 'password')} placeholder="Password...."/>
+                    </FormField>
+                    <FormField>
+                        Age
+                       <Input type="number" value={registerForm.age} onChange={(e) => handleChange(e, 'age')} placeholder="Age...."/>
+                    </FormField>
+                    <Button type="submit" primary>
+                        Register
+                    </Button>
+                </Form>
+            </Segment>
+
+        </React.Fragment>
+    );
 };
 
 export default withRouter(Register);

@@ -6,12 +6,12 @@ import commentInitialState from './commentInitialState';
 
 export const CommentReducer = (state=commentInitialState, action) => {
     switch(action.type) {
-        case CommentActionTypes.GET_MESSAGES:
+        case CommentActionTypes.GET_COMMENTS:
             return utils.deepCopy({
                 ...state,
                 ...{ currentComments: action.messages }
             });
-        case CommentActionTypes.CREATE_MESSAGES:
+        case CommentActionTypes.CREATE_COMMENTS:
             return utils.deepCopy({
                 ...state,
                 ...{ currentComments: action.updatedMessages }
@@ -21,4 +21,4 @@ export const CommentReducer = (state=commentInitialState, action) => {
     }
 }
 
-export const CommentContext = React.createContext(commentInitialState, CommentReducer);
+export const CommentContext = React.createContext(commentInitialState);

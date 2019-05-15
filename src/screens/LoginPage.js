@@ -1,10 +1,12 @@
 import React, { useReducer, useContext, useState, useEffect, useRef } from 'react';
+import { Button, Container, Form, Segment, Image, Header, Input } from 'semantic-ui-react';
 import { ApolloConsumer } from 'react-apollo';
 import { toast } from 'react-toastify';
 //import your context and reducer for that context.
 import { UserContext} from '../contexts/user/userReducer';
 import * as ActionTypes from '../contexts/user/userActionTypes';
 import * as utils from '../utils';
+import * as styles from '../styles';
 import LoadingScreen from '../components/LoadingScreen';
 import UserApi from '../api/users/userApi';
 import { withRouter } from 'react-router-dom';
@@ -12,7 +14,7 @@ import haloLogo from '../halo-logo.svg';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const LoginPage = (props) => {
+const LoginPage = ({history, client}) => {
 
     var ref = useRef();
 
@@ -35,15 +37,15 @@ const LoginPage = (props) => {
         e.stopPropagation();
         //Define a value that will be used for the life of the component
         try {
-            const loggedInUser = await new UserApi(client).login(authForm);
+            const { data } = await new UserApi(client).login(authForm);
         
-            dispatch({type: ActionTypes.LOGIN, loggedInUser});
+            dispatch({type: ActionTypes.LOGIN, loggedInUser: data.login});
 
             setAuthForm({username: '', password: ''});
 
             toast.success('Login Succesful!', { position: toast.POSITION.TOP_RIGHT });
             
-            props.history.push('/dashboard');
+            history.push('/dashboard');
                 
         }
         catch(error) {
@@ -57,25 +59,25 @@ const LoginPage = (props) => {
     }, null)
 
     return (
-        <ApolloConsumer>
-            {client => {
-                if(client) {
-                    return (
-                        <div id="login-container">
-                            <img src={haloLogo} className='login-container-image'/>
-                            <h1 className="login-header">Helo</h1>
-                            <input value={authForm.username} onChange={(e) => handleChange(e, 'username')} placeholder="Username...."/>
-                            <input value={authForm.password} onChange={(e) => handleChange(e, 'password')} placeholder="Password...."/>
-                            <div className="button-group">
-                                <button className="btn" onClick={(async e => await login(e, client))}>Login</button>
-                                <button className="btn" onClick={(e) => props.history.push('/register')}>Register</button>
-                            </div>
-                        </div>
-                    );
-                }
-                return <LoadingScreen />
-            }}
-        </ApolloConsumer>
+        <Segment size="massive" style={styles.loginPageContainer} vertical={true} textAlign='center'>
+            <Segment.Group size="massive" style={styles.loginPageSubContainer}>
+                <Image src={haloLogo} size="small" style={styles.image}/>
+                <Header.Content as="h1">Helo</Header.Content>
+                <Form style={styles.fullWidth}>
+                    <Form.Field>
+                        <Input value={authForm.username} onChange={(e) => handleChange(e, 'username')} placeholder="Username...." size="large"/>
+                    </Form.Field>
+                    <Form.Field>
+                        <Input value={authForm.password} onChange={(e) => handleChange(e, 'password')} placeholder="Password...." size="large" />
+                    </Form.Field>
+                    <Segment.Inline>
+                        <Button onClick={(async e => await login(e, client))}>Login</Button>
+                        <Button onClick={(e) => history.push('/register')}>Register</Button>
+                    </Segment.Inline>
+                </Form>
+                
+            </Segment.Group>
+        </Segment>
     );
 };
 

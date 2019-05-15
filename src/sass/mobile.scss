@@ -8,22 +8,45 @@
     width: 60px !important; 
 }
 
+
 .navbar {
     position: fixed;
-    display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
+    height: 75%;
+    padding-left: 5px;
+    padding-right: 5px;
     margin-top: -9px;
     margin-left: -15px;
     background: $backgroundColor;
 }
 
-.navbar > .link {
+.navbar > ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: display 2s ease-out;
+}
+
+.navbar > *:first-child {
+    margin-bottom: -20px;
+}
+
+.navbar > ul > li {
+    width: 100%;
+    text-align: center;
+}
+
+.navbar > ul > li:first-child {
+    order: 5;
+}
+
+.navbar > ul > li > .link {
     border: solid 2px $white;
-    display: inherit;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
     flex-direction: row;
     justify-content: space-around;
     align-self: center;
@@ -31,20 +54,25 @@
     margin: 20px;
 }
 
-.navbar > .link > svg {
-    font-size: 30px;
-    margin-top: 20px;
+.navbar > ul > li > .link:hover {
+    background: white;
 }
 
-.navbar > .link > .mobile-text {
+.navbar > ul > li >  .link > svg {
+    font-size: 30px;
+    margin-top: 15px;
+}
+
+.navbar > ul > li > .link > .mobile-text {
     font-size: 20px;
 }
 
 #user-avatar {
-    height: 100px;
-    width: 100px;
-    border-radius: 50px;
-    border: 3px dashed $white;
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+    border: 1px dashed $white;
+    order: 6;
 }
 
 #login-container {
@@ -56,10 +84,15 @@
     justify-content: center;
     align-items: center;
     height: 400px;
-    width: 400px;
+    width: 100%;
     background: $horizontalBackgroundColor;
     box-shadow: 0.25px 0.25 0.25px 0.25px $black;
     padding: 10px;
+}
+
+#login-container > .login-container-image {
+    height: 75px;
+    width: 75px;
 }
 
 #login-container > .login-header {
@@ -92,11 +125,20 @@
     font-size: 14px;
 }
 
-
-
-
 .new-post-container {
     margin-left: auto;
     margin-right: auto;
     background: $white;
+}
+
+.white-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.white-subcontainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }

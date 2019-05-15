@@ -4,7 +4,7 @@ try {
 
     const commentObj = new utils.InputWrapper('comment', 'username', 'body', 'dateCreaed');
     const userObj = new utils.InputWrapper('user', 'username', 'password', 'avatar', 21, 'dateRegistered');
-    const postObj = new utils.InputWrapper('post', 'title', 'Image', 'dateCreaed');
+    const postObj = new utils.InputWrapper('post', 'title', 'Image', 'dateCreaed', 'userId');
 
 
     console.log('utils--------', commentObj.returnObj('comment'))

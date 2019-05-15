@@ -1,41 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { ApolloConsumer } from 'react-apollo';
+import React, { useState, useEffect, useRef } from 'react';
+import { Container, Segment, Header, Image } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import * as utils from '../utils';
-import LoadingScreen from '../components/LoadingScreen';
 import postApi from '../api/posts/postApi';
 
-const PostPage = (props) => {
+const PostPage = ({match, client}) => {
     
+    const ref = useRef();
+
     const [currentPost, setCurrentPost] = useState(null);
     
-    const { id } = props.match.params;
+    const id = match.params.postId;
 
     async function getPost(client) {
-        let postData;
-        if(navigator.onLine) 
-            postData = await new postApi(client).getPost(id).data.getPost;
-        else 
-            postData = await new postApi(client).getPost(id).data.getPost;
+        let subscriber,
+            postData;
+            
+        if(navigator.onLine) {
+            subscriber = await new postApi(client).getPost(id);
+            subscriber.subscribe(({data}) => {
+                setCurrentPost(data.post);
+                console.log('currentPost-------------', currentPost);
+            });
+        } else {
+            postData = await new postApi(client).getPostOffline(id);
+            setCurrentPost(postData);
+        }
         
-        setCurrentPost(postData);
     }
 
+    useEffect(() => {
+        getPost(client);
+    }, null)
+
+    useEffect(() => {
+        cancelAnimationFrame(ref.current);
+    }, null);
+
     return (
-        <ApolloConsumer>
-           {client => {
-               if(client) {
-                    getPost(client);
-                    return (
-                       <div>
-                           {JSON.stringify(currentPost)}
-                       </div>
-                   )
-               }
-               return <LoadingScreen />
-           }}
-        </ApolloConsumer>
+        <Container>
+            <Segment>
+                <Header as="h2">{currentPost.title}</Header>
+                {JSON.stringify(currentPost)}
+            </Segment>
+            <Segment.Group>
+                <Image src={currentPost.image} size="large" />
+            </Segment.Group>
+        </Container>
     );
 };
 

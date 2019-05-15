@@ -1,37 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { ApolloConsumer } from 'react-apollo';
+import React, { useState, useEffect, useRef } from 'react';
+import { Container, Segment, Image, Icon, Header, Card } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import _  from 'lodash';
-import * as utils from '../utils';
 import userApi from '../api/users/userApi';
-import LoadingScreen from '../components/LoadingScreen';
+import { UserContext } from '../contexts/user/userReducer';
 
-const UserPage = (props) => {
 
-    const [user, setUser] = useState(null);
+
+const UserPage = ({match, client}) => {
+
+    const ref = useRef();
+
+    const id = match.params.userId;
+
+    const [user, setUser] = useState({});
+
+    const { state } = useContext(UserContext);
 
     async function getUser(client) {
-        let userData;
-        if(navigator.onLine) 
-            userData = await new userApi(client).getSingleUser(id).data.getUser;
-        else 
-            userData = await new userApi(client).getSingleUserOffline(id).data.getUser;
-    
-        setUser(userData);
+        let userData,
+            subscriber;
+
+        if(navigator.onLine) {
+            //Will use subscription in order to retrieve real time data over the server using graphql
+            //I
+            subscriber = await new userApi(client).getSingleUser(id);
+            subscriber.subscribe(({data}) => {
+                setUser(data.user);
+            });
+        } else {
+            userData = await new userApi(client).getSingleUserOffline(id);
+            setUser(userData.data.user);
+        }
+
     }
 
+    useEffect(() => {
+    
+        getUser(client);
+    
+    }, null);
+
+    useEffect(() => {
+        cancelAnimationFrame(ref.current);
+    }, null);   
+
     return (
-      <ApolloConsumer>
-          {client => {
-              if(client) {
-                  getUser(client);
-                  <div>
-                      {JSON.stringify(user)}
-                  </div>
-              }
-              return <LoadingScreen />
-          }}
-      </ApolloConsumer>  
+        <Container>
+            <Segment>
+                <Header as="h2">
+                    {user.username}
+                </Header>
+            </Segment>
+            <Segment>
+                <Image src={user.avatar} size="large" />
+                <Card>
+                    {
+                        state.currentUser && state.currentUser.friends.includes(id) 
+                        ? <Icon name="remove user" />
+                        : <Icon name="user plus" />
+                    }
+                </Card>
+            </Segment>
+            {JSON.stringify(user)}
+        </Container>
     );
 };
 

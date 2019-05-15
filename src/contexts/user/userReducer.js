@@ -16,10 +16,15 @@ export const UserReducer = (state=userInitialState, action) => {
                 ...state,
                 ...{ currentUser: null }
             });
+        case UserActionTypes.GET_USERS:
+            return utils.deepCopy({
+                ...state,
+                ...{ users: action.users }
+            });
         default:
             return state;
     }
 }
 
 //Define your context initial state.
-export const UserContext = React.createContext(userInitialState, UserReducer);
+export const UserContext = React.createContext(userInitialState);

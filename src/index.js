@@ -9,8 +9,9 @@ import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import App from './App';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHotel, faFileAlt, faSignInAlt, faCommentAlt, faWindowClose, faPlusCircle, faUserCog, faUserCheck, faPowerOff, faBars, faSearch } from '@fortawesome/free-solid-svg-icons'
-import './sass/app.scss';
+import { faHotel, faFileAlt, faSignInAlt, faCommentAlt, faWindowClose, faPlusCircle, faUserCog, faUserCheck, faPowerOff, faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
+import './App.css';
+// import './sass/app.scss';
 
 //Add icon classes to be used for font-awesome icons.
 library.add(faHotel, faFileAlt, faSignInAlt, faCommentAlt, faWindowClose, faPlusCircle, faUserCog, faUserCheck, faPowerOff, faBars, faSearch);

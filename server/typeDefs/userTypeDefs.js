@@ -1,7 +1,25 @@
 const gql = require('graphql-tag');
 
 const typeDefs = gql`
+    # Interfaces----------------------------------------------
+    interface IUser {
+        id: String!
+        username: String!
+        avatar: String!
+        dateRegistered: Date
+    }
 
+    interface ISocialMedia {
+        facebook: String
+        instagram: String
+        linkedin: String
+        twitter: String
+    }
+
+    # NOTE: When dealing with input types cannot define interfaces so just use composition.
+
+
+    # Input Types---------------------------------------------------------
     input LoginInput {
         username: String!
         password: String!
@@ -22,18 +40,23 @@ const typeDefs = gql`
         dateUpdated: String
     }
 
-    interface IUser {
-        id: String!
-        username: String!
-        avatar: String!
-        dateRegistered: Date
+    input UpdateSocialMedia {
+        type: String
+        value: String
     }
-    
+
     type UserItem implements IUser { 
         id: String!
         username: String!
         avatar: String!
         dateRegistered: Date
+    }
+
+    type SocialMedia implements ISocialMedia {
+        facebook: String
+        instagram: String
+        linkedin: String
+        twitter: String
     }
 
     type User implements IUser {
@@ -42,15 +65,18 @@ const typeDefs = gql`
         avatar: String!
         password: String!
         age: Int!
-        dateRegistered: Date!
-        deletedInd: Boolean!
-        permanentlyDeletedInd: Boolean!
+        friends: [String]
+        socialMediaInfo: SocialMedia
+        dateRegistered: Date
+        deletedInd: Boolean
+        permanentlyDeletedInd: Boolean
     }
 
     # use the extend keyword for when merge multiple typeDefinitions
     extend type Query {
         getAllUsers: [UserItem]
-        getUser(id: String!): User
+        searchUsers(searchVal: String): [UserItem]
+        getUser(id: String): User
     }
     
     # use the extend keyword for when merging multiple typeDefinitions
@@ -60,6 +86,8 @@ const typeDefs = gql`
         logout: User
         # Admin related fields
         updateUser(updateUserForm: UpdateUserInput!, userId: String!): User
+        # Update Social Media
+        updateSocialMedia(socialMediaForm: UpdateSocialMedia): SocialMedia
         deleteUser(userId: String!): User
     }
 `;

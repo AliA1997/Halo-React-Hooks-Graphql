@@ -25,6 +25,7 @@ module.exports = {
         //Base of all your content.
         contentBase: './dist',
         publicPath: '/',
+        open: 'Google Chrome',
         port: 9000
     },
     module: {
@@ -105,33 +106,43 @@ module.exports = {
             },
             //Define your rules for css, sass, and less files.
             {
-                test: /\.(css|scss)$/,
+                test:  /\.(le|sc|c)ss$/,
                 use: [
                     "style-loader",
                     {
                         loader: 'css-loader',
                         options: {
-                            sourceMap: true
+                            sourceMap: true,
                         }
                     },
+                    // {
+                    //     loader: 'fast-sass-loader',
+                    //     options: {
+                    //         includePaths: [path.resolve(__dirname, 'src', 'scss', 'src/sass')],
+                    //         sourceMap: true
+                    //     }
+                    // },
+                    // {
+                    //     loader: 'postcss-loader',
+                    //     options: {
+                    //         plugins: () => [require("autoprefixer")],
+                    //         sourceMap: true
+                    //     }
+                    // },
+                    'postcss-loader',
                     {
-                        loader: 'fast-sass-loader',
+                        loader: 'less-loader',
                         options: {
-                            includePaths: [path.resolve(__dirname, 'src', 'scss', 'src/sass')],
-                            sourceMap: true
+                            includePaths: [path.resolve(__dirname, '/node_modules')]
                         }
-                    },
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: () => [require("autoprefixer")],
-                            sourceMap: true
-                        }
-                    },
+                    }
                 ],
                 enforce: 'pre'
             }
         ]
+    },
+    resolve: {
+        extensions: [ '.ts', '.tsx', '.js', '.jsx', '.css', '.postcss', '.scss', '.less']
     },
     plugins: [
         new htmlPlugin({

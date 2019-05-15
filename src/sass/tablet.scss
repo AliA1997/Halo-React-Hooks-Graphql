@@ -19,20 +19,20 @@
         background: $bottombackgroundColor;
     }
     
-    .navbar > .link {
+    .navbar > ul > li >.link {
         border: unset;
     }
     
-    .navbar > .link > svg {
+    .navbar > ul > li > .link > svg {
         font-size: 50px;
         margin-top: 20px;
     }
     
-    .navbar > .link > .mobile-text {
+    .navbar > ul > li > .link > .mobile-text {
         display: none;
     }
 
-    .navbar > .link:last-child {
+    .navbar > ul > li > .link:last-child {
         margin-top: 150px;
     }
 }

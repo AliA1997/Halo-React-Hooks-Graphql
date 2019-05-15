@@ -1,22 +1,21 @@
 import React, { useState, useContext } from 'react';
+import { Form, FormField, Input, Image, Icon, Select, Segment, Header, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router';
 import { UserContext } from '../contexts/user/userReducer';
 import postApi from '../api/posts/postApi';
 import * as utils from '../utils';
+import * as styles from '../styles';
 import dateFns from 'date-fns';
 import _ from 'lodash';
-import { ApolloConsumer } from 'react-apollo';
-import LoadingScreen from '../components/LoadingScreen';
 import data from '../tags.json';
 import TagItem from '../components/TagItem';
-import Toast from '../components/Toast';
 
-const NewPostPage = (props) => {
+const NewPostPage = ({history, client}) => {
 
     const { state, dispatch } = useContext(UserContext);
 
     if(!state.currentUser) 
-        props.history.push('/');
+        history.push('/');
 
     const [newPostForm, setNewPostForm] = useState({
                                     userId: state.currentUser.id,
@@ -60,49 +59,57 @@ const NewPostPage = (props) => {
         setNewPostForm(form);
     }
 
-    async function createPost(e, client) {
+    async function createPost(e, currentClient) {
         e.stopPropagation();
         newPostForm.dateCreated = dateFns.format(new Date(), 'MM/DD/YYYY hh:mm aa');
-        const postRes = await postApi(client).createPost(currentUser.id, newPostForm);
+        console.log('newPostForm_-------------', newPostForm);
+        const postRes = await new postApi(currentClient).createPost(currentUser.id, newPostForm);
         console.log('postRes---------', postRes);
     }
+    
     return (
-        <ApolloConsumer>
-            {client => {
-                if(client) 
-                    return (
-                        <div className="new-post-container">
-                            <h2>Create New Post</h2>
-                            <div class="input-group">
-                                <label>Title</label>
-                                <input value={setNewPostForm.title} onChange={e => handleChange(e, 'title')} />
-                            </div>
-                            <img src={setNewPostForm.image || 'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'} className="new-post-image" />
-                            <div className="input-group">
-                                <label>Post Image</label>
-                                <input value={setNewPostForm.image} onChange={e => handleChange(e, 'image')}/>
-                            </div>
-                            <select onSelect={e => setCurrentTagValue(e.target.value)}>
-                                <option value="" selected></option>
-                                {data.tags.map(tag => <option value={tag}>{tag}</option>)}
-                            </select>
-                            <button onClick={e => addTags(e, currentTag)}>Add+</button>
-                            <div>
-                                <h2>Tags Selected:</h2>
-                                {
-                                    newPostForm.tags.length ? 
-                                        newPostForm.tags.map((tag, i) => (
-                                            <TagItem tag={tag} onClick={e => removeTag(e, i)} />
-                                        ))
-                                        : null
-                                }
-                            </div>
-                        </div>
-                    );
+        <React.Fragment>
             
-                return <LoadingScreen />
-            }}
-        </ApolloConsumer>
+            <Segment>
+                <Header as="h2">Create New Post</Header>
+            </Segment>
+
+            <Segment>
+                <Form onSubmit={e => createPost(e, client)}>
+                    <FormField>
+                        Title
+                1       <Input value={setNewPostForm.title} onChange={e => handleChange(e, 'title')} placeholder="New Post Title..." />
+                    </FormField> 
+                    <Image src={setNewPostForm.image || 'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'}  />
+                    <FormField>
+                        Post Image
+                        <Input value={setNewPostForm.image} onChange={e => handleChange(e, 'image')} placeholder="New Post Image..."/>
+                    </FormField>
+                    <FormField>
+
+                        <Select onSelect={e => setCurrentTagValue(e.target.value)} options={data.tags} />
+                        <Button onClick={e => addTags(e, currentTag)} color="green">
+                            Add
+                            <Icon name="plus" style={styles.icon}/>
+                        </Button>
+
+                    </FormField>
+                    <Segment.Group>
+                        <Header>Tags Selected:</Header>
+                        {
+                            newPostForm.tags.length ? 
+                                newPostForm.tags.map((tag, i) => (
+                                    <TagItem tag={tag} onClick={e => removeTag(e, i)} />
+                                ))
+                                : null
+                        }
+                    </Segment.Group>
+                    <Button type="submit" primary>
+                        Create Post
+                    </Button>
+                </Form>
+            </Segment>
+        </React.Fragment>
     );
 };
 

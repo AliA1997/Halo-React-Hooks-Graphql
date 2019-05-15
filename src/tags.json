@@ -1,20 +1,101 @@
 {
     "tags": [
-        "nba", 
-        "nfl",
-        "mlb",
-        "politics",
-        "nhl",
-        "trump",
-        "democrat",
-        "republican",
-        "allstars",
-        "lebron james",
-        "chris paul",
-        "los angeles lakers",
-        "california",
-        "nevada",
-        "prison",
-        "taxes"
+        {
+            "key": "tag",
+            "text": "NBA",
+            "value": "nba"
+        },
+        {
+            "key": "tag",
+            "text": "Democrat",
+            "value": "democrat"
+        },
+        {
+            "key": "tag",
+            "text": "Trump",
+            "value": "trump"
+        },
+        {
+            "key": "tag",
+            "text": "NHL",
+            "value": "nhl"
+        },
+        
+        {
+            "key": "tag",
+            "text": "NBA",
+            "value": "nba"
+        },
+        {
+            "key": "tag",
+            "text": "Politics",
+            "value": "politics"
+        },
+        
+        {
+            "key": "tag",
+            "text": "MLB",
+            "value": "mlb"
+        },
+        {
+            "key": "tag",
+            "text": "NFL",
+            "value": "nfl"
+        },
+                
+        {
+            "key": "tag",
+            "text": "MLB",
+            "value": "mlb"
+        },
+        {
+            "key": "tag",
+            "text": "Republican",
+            "value": "republican"
+        },
+                
+        {
+            "key": "tag",
+            "text": "All Stars",
+            "value": "allstars"
+        },
+        {
+            "key": "tag",
+            "text": "Lebron James",
+            "value": "lebron james"
+        },
+                
+        {
+            "key": "tag",
+            "text": "Chris Paul",
+            "value": "chris paul"
+        },
+        {
+            "key": "tag",
+            "text": "Los Angeles Lakers",
+            "value": "los angeles lakers"
+        },
+               
+        {
+            "key": "tag",
+            "text": "California",
+            "value": "california"
+        },
+        {
+            "key": "tag",
+            "text": "Nevada",
+            "value": "nevada"
+        },
+               
+        {
+            "key": "tag",
+            "text": "Prison",
+            "value": "prison"
+        },
+        {
+            "key": "tag",
+            "text": "Taxes",
+            "value": "taxes"
+        }
     ]
 }

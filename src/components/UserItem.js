@@ -1,14 +1,15 @@
 import React from 'react';
+import { Card, Image } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 
 const UserItem = ({history, id, username, avatar, dateRegistered}) => {
     return (
-        <div onClick={() => history.push(`/users/${id}`)}>
-            <h1>{username}</h1>
-            <image src={avatar} className="user-avatar" />
-            <p>Date Registered: {dateRegistered}</p>
-        </div>
+        <Card onClick={() => history.push(`/users/${id}`)}>
+            <Image src={avatar} size="large" />
+            <Card.Header>{username}</Card.Header>
+            <Card.Content>Date Registered: {dateRegistered}</Card.Content>
+        </Card>
     );
 };
 

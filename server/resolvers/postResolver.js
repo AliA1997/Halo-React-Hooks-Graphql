@@ -12,7 +12,7 @@ module.exports = {
 
             return db.collection('posts').orderBy(firebase.firestore.FieldPath.documentId()).limit(25).get()
                 .then((querySnapshot) => {
-                    console.log(querySnapshot)
+
                     querySnapshot.forEach(postDoc => {
 
                         const post = postDoc.data();
@@ -112,13 +112,16 @@ module.exports = {
     Mutation: {
         createPost: (_, args, context) => {
             const postForm = args.postForm,
-                  postToAdd = new utils.InputWrapper("post", postForm.title, postForm.image, postForm.dateCreated).returnObj("post");
-
-            //Use google firestore to add the document with a auto-generated id.
-            return db.collection('posts').add(postToAdd)
-                .then(docsRef => {
-                    console.log("Post docRef-----------", docsRef);
-                });
+                  { db, session } = context;
+                  
+            if(session && session.user) {
+                postToAdd = new utils.InputWrapper("post", postForm.title, postForm.image, postForm.dateCreated).returnObj("post");
+                //Use google firestore to add the document with a auto-generated id.
+                return db.collection('posts').add(postToAdd)
+                    .then(docsRef => {
+                        console.log("Post docRef-----------", docsRef);
+                    });
+            }
         },
         updatePost: (_, args, context) => {
             const { db } = context,

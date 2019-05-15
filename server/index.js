@@ -79,7 +79,7 @@ app.use(cors());
 const server = new ApolloServer({
                     typeDefs: [postTypeDefs, userTypeDefs, commentTypeDefs],
                     resolvers: [postResolver, userResolver, commentResolver], 
-                    logger: logger(commentResolver),
+                    logger: logger([this.resolvers]),
                     context: ({req}) => {
                         const db = req.db;
                         const session = req.session;

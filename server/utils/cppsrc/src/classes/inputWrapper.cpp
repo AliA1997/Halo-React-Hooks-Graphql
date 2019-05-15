@@ -123,7 +123,7 @@ void InputWrapper::DetermineInstanceToDefine(Napi::Env env, Napi::String typeOfI
         //Then get the internal instance of that class or that actual members of that class.
         PostInput* post_input = parentInstance->GetPostInternalInstance();
         //Then assign your member of your wrapper class to the instance public methods.
-        this->currentPost_ = new PostInput(post_input->getTitle(), post_input->getImage(), post_input->getDateCreated());
+        this->currentPost_ = new PostInput(post_input->getTitle(), post_input->getImage(), post_input->getDateCreated(), post_input->getUserId());
 
     } else if(typeOfInstance == commentCompare) {
 
@@ -152,7 +152,7 @@ bool InputWrapper::DetermineValidArguments(const Napi::CallbackInfo& info, Napi:
                 //post value and it contains valid arguments
                 (                    
                     info[0].IsString() && compareValue == postCompare
-                    &&  (info[1].IsString() && info[2].IsString() && info[3].IsString())
+                    &&  (info[1].IsString() && info[2].IsString() && info[3].IsString() && info[4].IsString())
                 ) 
                 || 
                 //comment value and it contains valid arguments
@@ -191,8 +191,10 @@ void InputWrapper::CreatePostInputInstance(const Napi::CallbackInfo& info) {
 
     Napi::String dateCreated = info[3].As<Napi::String>();
 
+    Napi::String userId = info[4].As<Napi::String>();
+
     //Define a new instance of the PostInput class.
-    this->currentPost_ = new PostInput(title, image, dateCreated);
+    this->currentPost_ = new PostInput(title, image, dateCreated, userId);
 
     return;
 }
