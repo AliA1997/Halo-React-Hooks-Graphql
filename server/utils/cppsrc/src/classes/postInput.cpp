@@ -1,6 +1,3 @@
-#include <napi.h>
-#include <stdio.h>
-#include <string>
 #include "postInput.h"
 
 PostInput::PostInput(std::string title, std::string image, std::string dateCreated, std::string userId) {

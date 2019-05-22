@@ -10,6 +10,11 @@ class RegisterForm {
         std::string getAvatar();
         int getAge();
         std::string getDateRegistered();
+        std::string getFacebook();
+        std::string getInstagram();
+        std::string getLinkedin();
+        std::string getTwitter();
+        Napi::String returnSocialMedia(Napi::Env env);
         Napi::Object returnObj(Napi::Env env);
     private:
         std::string username_;

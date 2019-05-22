@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <napi.h>
-#include <string>
 #include "inputWrapper.h"
 
 //Define your FUnction referennce towards your constructor.
@@ -30,7 +27,9 @@ InputWrapper::InputWrapper(const Napi::CallbackInfo& info) : Napi::ObjectWrap<In
     Napi::HandleScope scope(env);
 
     //Convert typesToCompare to a n-api string
+    Napi::String registerCompare = Napi::String::New(env, "register");
     Napi::String userCompare = Napi::String::New(env, "user");
+    Napi::String socialMediaCompare = Napi::String::New(env, "socialMedia");
     Napi::String postCompare = Napi::String::New(env, "post");
     Napi::String commentCompare = Napi::String::New(env, "comment");
     Napi::String compareValue;
@@ -56,17 +55,21 @@ InputWrapper::InputWrapper(const Napi::CallbackInfo& info) : Napi::ObjectWrap<In
         //Then wrap your object with your InputWrapper 
         InputWrapper* parent = Napi::ObjectWrap<InputWrapper>::Unwrap(parent_obj);
         
-        InputWrapper::DetermineInstanceToDefine(env, compareValue, parent, userCompare, postCompare, commentCompare);
+        InputWrapper::DetermineInstanceToDefine(env, compareValue, parent, registerCompare, postCompare, userCompare, socialMediaCompare, commentCompare);
         
         return;
     }
     
     //Determine if the arguments are valid 
-    if(info.Length() > 2 && InputWrapper::DetermineValidArguments(info, userCompare, postCompare, commentCompare, compareValue)) {
+    if(info.Length() > 2 && InputWrapper::DetermineValidArguments(info, registerCompare, postCompare, commentCompare, userCompare, socialMediaCompare, compareValue)) {
      
         //Based on the compareValue initialize a new instance of a class.
-        if(compareValue == userCompare) {
+        if(compareValue == registerCompare) {
             InputWrapper::CreateRegisterFormInstance(info);
+        } else if(compareValue == userCompare) {
+            InputWrapper::CreateUserInstance(info);
+        } else if(compareValue == socialMediaCompare) {
+            InputWrapper::CreateSocialMediaInstance(info);
         } else if(compareValue == postCompare) {
             InputWrapper::CreatePostInputInstance(info);
         } else if(compareValue == commentCompare) {
@@ -95,9 +98,13 @@ Napi::Value InputWrapper::ReturnObj(const Napi::CallbackInfo& info) {
 
     //Based on the first argument return a object from the registerForm class, or currentPost class, and currentComment post
     //If the string includes a user characters which will return a position else it will return the maximum position of characters 18446744073709551615
-    if(type.find("user") != std::string::npos) {
+    if(type.find("register") != std::string::npos) {
         objToReturn = this->registerForm_->returnObj(env);
         //If the type does contain a post string will not equal the max position value. 
+    } else if(type.find("user") != std::string::npos) {
+        objToReturn = this->user_->returnObj(env);
+    } else if(type.find("socialMedia") != std::string::npos) {
+        objToReturn = this->socialMedia_->returnObj(env);
     } else if(type.find("post") != std::string::npos) {
         objToReturn = this->currentPost_->returnObj(env);
         //If the type does contain a comment string will not equal the max position value.
@@ -109,15 +116,41 @@ Napi::Value InputWrapper::ReturnObj(const Napi::CallbackInfo& info) {
 }
 
 //Argument checker.
-void InputWrapper::DetermineInstanceToDefine(Napi::Env env, Napi::String typeOfInstance, InputWrapper* parentInstance, Napi::String userCompare, Napi::String postCompare, Napi::String commentCompare) {
+void InputWrapper::DetermineInstanceToDefine(Napi::Env env, Napi::String typeOfInstance, InputWrapper* parentInstance, Napi::String registerCompare, Napi::String postCompare, Napi::String userCompare, Napi::String socialMediaCompare, Napi::String commentCompare) {
     //Convert your second argument to an object based on the first argument.
-    if(typeOfInstance == userCompare) {
+    if(typeOfInstance == registerCompare) {
 
         //Then get the internal instance of that class or that actual members of that class.
         RegisterForm* register_form = parentInstance->GetUserInternalInstance();
         //Then assign your member of your wrapper class to the instance public methods.
-        this->registerForm_ = new RegisterForm(register_form->getUsername(), register_form->getPassword(), register_form->getAvatar(), register_form->getAge(), register_form->getDateRegistered());
+        this->registerForm_ = new RegisterForm(
+                                register_form->getUsername(),
+                                register_form->getPassword(),
+                                register_form->getAvatar(),
+                                register_form->getAge(),
+                                register_form->getDateRegistered()
+                                );
     
+    } else if(typeOfInstance == userCompare) {
+        //Then get the internal instance of that class or that actual members of that class.
+        User* user = parentInstance->GetUserInfoInternalInstance();
+        //Then assign your member of your wrapper class to the instance public methods.
+        this->user_ = new User(
+                                user->getId(),
+                                user->getUsername(),
+                                user->getAvatar(),
+                                user->getAge(),
+                                user->getDateRegistered()
+                            );
+    
+    } else if(typeOfInstance == socialMediaCompare) {
+        SocialMedia* socialMedia = parentInstance->GetSocialMediaInternalInstance();
+        this->socialMedia_ = new SocialMedia(
+                                socialMedia->getFacebook(),
+                                socialMedia->getInstagram(),
+                                socialMedia->getLinkedin(),
+                                socialMedia->getTwitter()
+                            );
     } else if(typeOfInstance == postCompare) {
 
         //Then get the internal instance of that class or that actual members of that class.
@@ -140,15 +173,26 @@ void InputWrapper::DetermineInstanceToDefine(Napi::Env env, Napi::String typeOfI
 }
 
 //Determine valid arguments.
-bool InputWrapper::DetermineValidArguments(const Napi::CallbackInfo& info, Napi::String userCompare, Napi::String postCompare, Napi::String commentCompare, Napi::String compareValue) {
+bool InputWrapper::DetermineValidArguments(const Napi::CallbackInfo& info, Napi::String registerCompare, Napi::String postCompare, Napi::String commentCompare, 
+                                            Napi::String userCompare, Napi::String socialMediaCompare, Napi::String compareValue) {
     Napi::Env env = info.Env();
     //If it's a registerForm value and it contains valid arguments 
     return (
                 (
-                    info[0].IsString() && compareValue == userCompare
+                    info[0].IsString() && compareValue == registerCompare
                     &&  (info[1].IsString() && info[2].IsString() && info[3].IsString() && info[4].IsNumber() && info[5].IsString())
                 ) 
                 || 
+                (
+                    info[0].IsString() && compareValue == userCompare
+                    &&  (info[1].IsString() && info[2].IsString() && info[3].IsString() && info[4].IsNumber() && info[5].IsString())
+                )
+                ||
+                (
+                    info[0].IsString() && compareValue == socialMediaCompare
+                    &&  (info[1].IsString() && info[2].IsString() && info[3].IsString() && info[4].IsString())
+                )
+                ||
                 //post value and it contains valid arguments
                 (                    
                     info[0].IsString() && compareValue == postCompare
@@ -162,8 +206,6 @@ bool InputWrapper::DetermineValidArguments(const Napi::CallbackInfo& info, Napi:
                 )
             );
 }
-
-
 
 void InputWrapper::CreateRegisterFormInstance(const Napi::CallbackInfo& info) {
     //Define your values.
@@ -182,6 +224,39 @@ void InputWrapper::CreateRegisterFormInstance(const Napi::CallbackInfo& info) {
 
     return;
 }
+
+void InputWrapper::CreateSocialMediaInstance(const Napi::CallbackInfo& info) {
+    Napi::String facebook = info[1].As<Napi::String>();
+
+    Napi::String instagram = info[2].As<Napi::String>();
+
+    Napi::String linkedin = info[3].As<Napi::String>();
+
+    Napi::String twitter = info[4].As<Napi::String>();
+
+    this->socialMedia_ = new SocialMedia(facebook, instagram, linkedin, twitter);
+    
+    return;
+}
+
+void InputWrapper::CreateUserInstance(const Napi::CallbackInfo& info) {
+    //Define your values.
+    Napi::String id = info[1].As<Napi::String>();
+
+    Napi::String username = info[2].As<Napi::String>();
+
+    Napi::String avatar = info[3].As<Napi::String>();
+
+    Napi::Number age = info[4].As<Napi::Number>();
+    
+    Napi::String dateRegistered = info[5].As<Napi::String>();
+
+    //Assign a new User class instance/
+    this->user_ =  new User(id, username, avatar, age, dateRegistered);
+
+    return;
+}
+
 
 void InputWrapper::CreatePostInputInstance(const Napi::CallbackInfo& info) {
     //Define your values.
@@ -216,7 +291,16 @@ void InputWrapper::CreateCommentInputInstance(const Napi::CallbackInfo& info) {
 RegisterForm* InputWrapper::GetUserInternalInstance() {
     return this->registerForm_;
 }
+
+SocialMedia* InputWrapper::GetSocialMediaInternalInstance() {
+    return this->socialMedia_;
+}
     
+User* InputWrapper::GetUserInfoInternalInstance() {
+    return this->user_;
+}
+
+
 PostInput* InputWrapper::GetPostInternalInstance() {
     return this->currentPost_;
 }

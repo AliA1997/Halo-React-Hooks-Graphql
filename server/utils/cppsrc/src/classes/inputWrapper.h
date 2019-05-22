@@ -1,7 +1,9 @@
 #include <napi.h>
 #include "registerForm.h"
+#include "user.h"
 #include "postInput.h"
 #include "commentInput.h"
+#include "socialMedia.h"
 
 //Make your class inherit n-api objectWrap class.
 class InputWrapper : public Napi::ObjectWrap<InputWrapper> {
@@ -13,23 +15,31 @@ class InputWrapper : public Napi::ObjectWrap<InputWrapper> {
         InputWrapper(const Napi::CallbackInfo& info);
 
         Napi::Value ReturnObj(const Napi::CallbackInfo& info);
+
+        void CreateSocialMediaInstance(const Napi::CallbackInfo& info);
         
+        void CreateUserInstance(const Napi::CallbackInfo& info);
+
         void CreateRegisterFormInstance(const Napi::CallbackInfo& info);
         
         void CreatePostInputInstance(const Napi::CallbackInfo& info);
         
         void CreateCommentInputInstance(const Napi::CallbackInfo& info);
         
-        bool DetermineValidArguments(const Napi::CallbackInfo& info, Napi::String userCompare, Napi::String postCompare, Napi::String commentCompare, Napi::String compareValue);
+        bool DetermineValidArguments(const Napi::CallbackInfo& info, Napi::String registerCompare, Napi::String postCompare, Napi::String commentCompare, Napi::String userCompare, Napi::String socialMediaCompare, Napi::String compareValue);
         
         //For determining the internal instance to defien pass the current environment, typeOfINstance string and current InputWrapper instance.
-        void DetermineInstanceToDefine(Napi::Env env, Napi::String typeOfInstance, InputWrapper* parentInstance, Napi::String userCompare, Napi::String postCompare, Napi::String commentCompare);
+        void DetermineInstanceToDefine(Napi::Env env, Napi::String typeOfInstance, InputWrapper* parentInstance, Napi::String registerCompare, Napi::String postCompare, Napi::String userCompare, Napi::String socialMediaCompare, Napi::String commentCompare);
         
         CommentInput* GetCommentInternalInstance();
         
         PostInput* GetPostInternalInstance();
         
         RegisterForm* GetUserInternalInstance();
+
+        User* GetUserInfoInternalInstance();
+
+        SocialMedia* GetSocialMediaInternalInstance();
     
     //Define your private methods and private members of class.
     private:
@@ -43,4 +53,8 @@ class InputWrapper : public Napi::ObjectWrap<InputWrapper> {
         PostInput *currentPost_;
         
         RegisterForm *registerForm_;
+
+        User *user_;
+
+        SocialMedia *socialMedia_;
 };

@@ -1,6 +1,3 @@
-#include <napi.h>
-#include <stdio.h>
-#include <string>
 #include "commentInput.h"
 
 CommentInput::CommentInput(std::string username, std::string body, std::string dateCreated) {
