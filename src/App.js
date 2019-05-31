@@ -1,23 +1,34 @@
-import React, { Component } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
 import { ToastContainer } from 'react-toastify';
+import { UserContext } from './contexts/user/userReducer';
+import * as ActionTypes from './contexts/user/userActionTypes';
 import AuthenticatedWrapper from './AuthenticatedWrapper';
-import * as utils from './utils';
 import * as styles from './styles';
+import 'react-dropzone-uploader/dist/styles.css';
 
-export default class App extends Component {
-    // componentDidMount() {
-    //     if(this.props.hasOwnProperty('currentUser') && this.props.currentUser) {
-    //         currentUser.Role = utils.Roles.LoggedInUser;
-    //     } else {
-    //         currentUser.Role = utils.Roles.Guest;
-    //     }
-    // }
-    render() {
-        return (
-            <div style={styles.container}>
-                <ToastContainer />
-                <AuthenticatedWrapper />
-            </div>
-        );
-    }
+
+const App = (props) =>{
+    const ref = useRef();
+    const { state, dispatch } = useContext(UserContext);
+
+    useEffect(() => {
+        const userString = localStorage.getItem('user');
+        if(state && !state.currentUser) 
+            dispatch({type: ActionTypes.SET_USER, user: userString})
+    }, null)
+
+    useEffect(() => {
+        if(ref)
+            cancelAnimationFrame(ref.current);
+    }, null)
+
+    return (
+        <div style={styles.container}>
+            <ToastContainer />
+            <AuthenticatedWrapper />
+        </div>
+    );
+
 }
+
+export default App;

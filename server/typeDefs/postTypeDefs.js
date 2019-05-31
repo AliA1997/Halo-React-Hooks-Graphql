@@ -19,7 +19,6 @@ const typeDefs = gql`
     }
 
     input UpdatePostInput {
-        userId: String
         title: String
         image: String
         tags: [String]
@@ -54,9 +53,9 @@ const typeDefs = gql`
     }
     
     type Mutation {
-        createPost(postForm: PostForm, userId: String): [PostItem]
-        updatePost(updatedPost: UpdatePostInput, postId: String, userId: String): [PostItem]
-        deletePost(postId: String, userId: String): [PostItem]
+        createPost(postForm: PostForm, userId: String): PostItem
+        updatePost(updatedPost: UpdatePostInput, postId: String, userId: String): PostItem
+        deletePost(postId: String, userId: String): Message
     }
 
     schema {

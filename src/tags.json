@@ -1,101 +1,131 @@
 {
     "tags": [
         {
-            "key": "tag",
+            "key": "tag1",
             "text": "NBA",
             "value": "nba"
         },
         {
-            "key": "tag",
+            "key": "tag2",
             "text": "Democrat",
             "value": "democrat"
         },
         {
-            "key": "tag",
+            "key": "tag3",
             "text": "Trump",
             "value": "trump"
         },
         {
-            "key": "tag",
+            "key": "tag4",
             "text": "NHL",
             "value": "nhl"
         },
         
         {
-            "key": "tag",
+            "key": "tag5",
             "text": "NBA",
             "value": "nba"
         },
         {
-            "key": "tag",
+            "key": "tag6",
             "text": "Politics",
             "value": "politics"
         },
         
         {
-            "key": "tag",
+            "key": "tag7",
             "text": "MLB",
             "value": "mlb"
         },
         {
-            "key": "tag",
+            "key": "tag8",
             "text": "NFL",
             "value": "nfl"
         },
                 
         {
-            "key": "tag",
+            "key": "tag9",
             "text": "MLB",
             "value": "mlb"
         },
         {
-            "key": "tag",
+            "key": "tag10",
             "text": "Republican",
             "value": "republican"
         },
                 
         {
-            "key": "tag",
+            "key": "tag11",
             "text": "All Stars",
             "value": "allstars"
         },
         {
-            "key": "tag",
+            "key": "tag12",
             "text": "Lebron James",
             "value": "lebron james"
         },
                 
         {
-            "key": "tag",
+            "key": "tag13",
             "text": "Chris Paul",
             "value": "chris paul"
         },
         {
-            "key": "tag",
+            "key": "tag14",
             "text": "Los Angeles Lakers",
             "value": "los angeles lakers"
         },
                
         {
-            "key": "tag",
+            "key": "tag15",
             "text": "California",
             "value": "california"
         },
         {
-            "key": "tag",
+            "key": "tag16",
             "text": "Nevada",
             "value": "nevada"
         },
                
         {
-            "key": "tag",
+            "key": "tag17",
             "text": "Prison",
             "value": "prison"
         },
         {
-            "key": "tag",
+            "key": "tag18",
             "text": "Taxes",
             "value": "taxes"
+        },
+        {
+            "key": "tag19",
+            "text": "Golden State Warriors",
+            "value": "golden state warriors"
+        },
+        {
+            "key": "tag20",
+            "text": "Boston Celtics",
+            "value": "boston celtics"
+        },
+        {
+            "key": "tag21",
+            "text": "Astronomy",
+            "value": "astronomy"
+        },
+        {
+            "key": "tag22",
+            "text": "Shannon Sharpe",
+            "value": "shannon sharpe"
+        },
+        {
+            "key": "tag23",
+            "text": "Margot Robbie",
+            "value": "margot robbie"
+        },
+        {
+            "key": "tag24",
+            "text": "Angelina Jolie",
+            "value": "angelina jolie"
         }
     ]
 }

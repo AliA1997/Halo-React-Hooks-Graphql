@@ -1,9 +1,12 @@
 #include "postInput.h"
 
-PostInput::PostInput(std::string title, std::string image, std::string dateCreated, std::string userId) {
+PostInput::PostInput(std::string title, std::string image, std::string dateCreated, std::string dateUpdated, int deletedInd, int permanentlyDeletedInd, std::string userId) {
     this->title_ = title;
     this->image_ = image;
     this->dateCreated_ = dateCreated;
+    this->dateUpdated_ = dateUpdated;
+    this->deletedInd_ = deletedInd;
+    this->permanentlyDeletedInd_ = permanentlyDeletedInd;
     this->userId_ = userId;
 }
 
@@ -19,6 +22,18 @@ std::string PostInput::getImage() {
 
 std::string PostInput::getDateCreated() {
     return this->dateCreated_;
+}
+
+std::string PostInput::getDateUpdated() {
+    return this->dateUpdated_;
+}
+
+int PostInput::getDeletedInd() {
+    return this->deletedInd_;
+}
+
+int PostInput::getPermanentlyDeletedInd() {
+    return this->permanentlyDeletedInd_;
 }
 
 std::string PostInput::getUserId() {
@@ -37,6 +52,15 @@ Napi::Object PostInput::returnObj(Napi::Env env) {
     Napi::String dateCreatedKey = Napi::String::New(env, "dateCreated");
     Napi::String dateCreatedValue = Napi::String::New(env, this->dateCreated_);
 
+    Napi::String dateUpdatedKey = Napi::String::New(env, "dateUpdated");
+    Napi::String dateUpdatedValue = Napi::String::New(env, this->dateUpdated_);
+
+    Napi::String deletedIndKey = Napi::String::New(env, "deletedInd");
+    Napi::Number deletedIndValue = Napi::Number::New(env, this->deletedInd_);
+
+    Napi::String permanentlyDeletedIndKey = Napi::String::New(env, "permanentlyDeletedInd");
+    Napi::Number permanentlyDeletedIndValue = Napi::Number::New(env, this->permanentlyDeletedInd_);
+
     Napi::String userIdKey = Napi::String::New(env, "userId");
     Napi::String userIdValue = Napi::String::New(env, this->userId_);
 
@@ -45,6 +69,12 @@ Napi::Object PostInput::returnObj(Napi::Env env) {
     objToReturn.Set(avatarKey, avatarValue);
 
     objToReturn.Set(dateCreatedKey, dateCreatedValue);
+
+    objToReturn.Set(dateUpdatedKey, dateUpdatedValue);
+
+    objToReturn.Set(deletedIndKey, deletedIndValue);
+
+    objToReturn.Set(permanentlyDeletedIndKey, permanentlyDeletedIndValue);
 
     objToReturn.Set(userIdKey, userIdValue);
 

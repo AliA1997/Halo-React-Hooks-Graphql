@@ -1,14 +1,23 @@
 #include "commentInput.h"
 
-CommentInput::CommentInput(std::string username, std::string body, std::string dateCreated) {
+CommentInput::CommentInput(std::string username, std::string body, std::string dateCreated, std::string avatar, std::string dateUpdated, int deletedInd, int permanentlyDeletedInd, std::string postId) {
     this->username_ = username;
+    this->avatar_ = avatar;
     this->body_ = body;
     this->dateCreated_ = dateCreated;
+    this->dateUpdated_ = dateUpdated;
+    this->deletedInd_ = deletedInd;
+    this->permanentlyDeletedInd_ = permanentlyDeletedInd;
+    this->postId_ = postId;
 }
 
 //Define methods for defining internal class instance within your InputWrapper when another class instance is passed as an argument.
 std::string CommentInput::getUsername() {
     return this->username_;
+}
+
+std::string CommentInput::getAvatar() {
+    return this->avatar_;
 }
 
 std::string CommentInput::getBody() {
@@ -17,6 +26,22 @@ std::string CommentInput::getBody() {
 
 std::string CommentInput::getDateCreated() {
     return this->dateCreated_;
+}
+
+std::string CommentInput::getDateUpdated() {
+    return this->dateUpdated_;
+}
+
+int CommentInput::getDeletedInd() {
+    return this->deletedInd_;
+}
+
+int CommentInput::getPermanentlyDeletedInd() {
+    return this->permanentlyDeletedInd_;
+}
+
+std::string CommentInput::getPostId() {
+    return this->postId_;
 }
 
 Napi::Object CommentInput::returnObj(Napi::Env env) {
@@ -32,10 +57,31 @@ Napi::Object CommentInput::returnObj(Napi::Env env) {
     Napi::String dateCreatedKey = Napi::String::New(env, "dateCreated");
     Napi::String dateCreatedValue = Napi::String::New(env, this->dateCreated_);
 
+    Napi::String avatarKey = Napi::String::New(env, "avatar");
+    Napi::String avatarValue = Napi::String::New(env, this->avatar_);
+
+    Napi::String dateUpdatedKey = Napi::String::New(env, "dateUpdated");
+    Napi::String dateUpdatedValue = Napi::String::New(env, this->dateUpdated_);
+
+    Napi::String deletedIndKey = Napi::String::New(env, "deletedInd");
+    Napi::Number deletedIndValue = Napi::Number::New(env, this->deletedInd_);
+
+    Napi::String permanentlyDeletedIndKey = Napi::String::New(env, "permanentlyDeletedInd");
+    Napi::Number permanentlyDeletedIndValue = Napi::Number::New(env, this->permanentlyDeletedInd_);
+
+    Napi::String postIdKey = Napi::String::New(env, "postId");
+    Napi::String postIdValue = Napi::String::New(env, this->postId_);
+
+
     //Set your properties and ekys for your object to return.
     objToReturn.Set(usernameKey, usernameValue);
+    objToReturn.Set(avatarKey, avatarValue);
     objToReturn.Set(bodyKey, bodyValue);
     objToReturn.Set(dateCreatedKey, dateCreatedValue);
+    objToReturn.Set(dateUpdatedKey, dateUpdatedValue);
+    objToReturn.Set(deletedIndKey, deletedIndValue);
+    objToReturn.Set(permanentlyDeletedIndKey, permanentlyDeletedIndValue);
+    objToReturn.Set(postIdKey, postIdValue);
 
     return objToReturn;
 }   

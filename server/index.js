@@ -69,6 +69,7 @@ app.use(session({
         resave: true,
         saveUninitialized: false,
         cookie: {
+            secure: process.env.NODE_ENV === 'production',
             maxAge: 1000 * 60 * 60 * 24 * 14
         }
     })
@@ -81,9 +82,7 @@ const server = new ApolloServer({
                     resolvers: [postResolver, userResolver, commentResolver], 
                     logger: logger([this.resolvers]),
                     context: ({req}) => {
-                        const db = req.db;
-                        const session = req.session;
-                        return { db: db, session: session };
+                        return {req};
                     }
                 });
 

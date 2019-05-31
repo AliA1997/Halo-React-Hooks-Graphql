@@ -4,15 +4,25 @@
 
 class CommentInput {
     public:
-        CommentInput(std::string username, std::string body, std::string dateCreated);
+        CommentInput(std::string username, std::string body, std::string dateCreated, std::string avatar, std::string dateUpdated, int deletedInd, int permanentlyDeletedInd, std::string postId);
         //Define methods for defining a new instance when a internal instance is passed in
         //Since the properties of the class are private have member of the class that return the properties of the class that are public.
         std::string getUsername();
+        std::string getAvatar();
         std::string getBody();
         std::string getDateCreated();
+        std::string getDateUpdated();
+        int getDeletedInd();
+        int getPermanentlyDeletedInd();
+        std::string getPostId();
         Napi::Object returnObj(Napi::Env env);
     private:
         std::string username_;
+        std::string avatar_;
         std::string body_;
         std::string dateCreated_;
+        std::string dateUpdated_;
+        int deletedInd_;
+        int permanentlyDeletedInd_;
+        std::string postId_;
 };

@@ -3,9 +3,9 @@ const gql = require('graphql-tag');
 const typeDefs = gql`
     # Interfaces----------------------------------------------
     interface IUser {
-        id: String!
-        username: String!
-        avatar: String!
+        id: String
+        username: String
+        avatar: String
         dateRegistered: Date
     }
 
@@ -36,7 +36,8 @@ const typeDefs = gql`
     input UpdateUserInput {
         username: String
         avatar: String
-        age: String
+        age: Int
+        dateRegistered: Date
         dateUpdated: String
     }
 
@@ -59,15 +60,16 @@ const typeDefs = gql`
         twitter: String
     }
 
-    type User implements IUser {
-        id: String!
-        username: String!
-        avatar: String!
-        password: String!
-        age: Int!
+    type User {
+        id: String
+        username: String
+        avatar: String
+        password: String
+        age: Int
         friends: [String]
         socialMediaInfo: SocialMedia
         dateRegistered: Date
+        dateUpdated: String
         deletedInd: Boolean
         permanentlyDeletedInd: Boolean
     }
@@ -87,8 +89,8 @@ const typeDefs = gql`
         # Admin related fields
         updateUser(updateUserForm: UpdateUserInput!, userId: String!): User
         # Update Social Media
-        updateSocialMedia(socialMediaForm: UpdateSocialMedia): SocialMedia
-        deleteUser(userId: String!): User
+        updateSocialMedia(socialMediaForm: UpdateSocialMedia, userId: String!, socialMediaId: String): SocialMedia
+        deleteUser(userId: String!): Message
     }
 `;
 

@@ -145,8 +145,11 @@
   <ItemGroup>
     <ClCompile Include="..\cppsrc\main.cpp"/>
     <ClCompile Include="..\cppsrc\src\classes\commentInput.cpp"/>
+    <ClCompile Include="..\cppsrc\src\classes\updateC.cpp"/>
     <ClCompile Include="..\cppsrc\src\classes\socialMedia.cpp"/>
+    <ClCompile Include="..\cppsrc\src\classes\smP.cpp"/>
     <ClCompile Include="..\cppsrc\src\classes\postInput.cpp"/>
+    <ClCompile Include="..\cppsrc\src\classes\updateP.cpp"/>
     <ClCompile Include="..\cppsrc\src\classes\registerForm.cpp"/>
     <ClCompile Include="..\cppsrc\src\classes\user.cpp"/>
     <ClCompile Include="..\cppsrc\src\classes\inputWrapper.cpp"/>

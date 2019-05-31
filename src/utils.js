@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { Icon, Image } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import { ApolloConsumer } from 'react-apollo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as ActionTypes from './contexts/user/userActionTypes';
 import searchUsersIcon from './searchUsersIcon.svg';
 import gql from 'graphql-tag';
 
@@ -69,12 +71,31 @@ export function setTitleRoute(props) {
     )
 }
 
+export function setDocTitle(title) {
+    document.title = `Halo ${title}`;
+}
+
+//If the browser is running use layout effect since it's synchronous with browser else use useEffect.
+export const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+
+//Get the browser dimensions
+export function getBrowserWidth() {
+    return Math.max(
+        document.body.scrollWidth,
+        document.documentElement.scrollWidth,
+        document.body.offsetWidth,
+        document.documentElement.offsetWidth,
+        document.documentElement.clientWidth
+    );
+}
+
 export const Roles  = { 
     Guest: 'Guest',
     LoggedInUser: 'Logged In User'
 };
 
-export function Icon(icon) {
+export function Ico(icon) {
     let iconToReturn = '';
 
     switch(icon) {
@@ -82,33 +103,33 @@ export function Icon(icon) {
             iconToReturn = <FontAwesomeIcon icon='bars' className="mobile-icon"  onClick={e => arguments[1](e)}/>;
             break;        
         case 'home':
-            iconToReturn = <FontAwesomeIcon icon='hotel' />;
+            iconToReturn = <Icon name="home" size="huge"/>;
             break;        
         case 'user':
-            iconToReturn = <FontAwesomeIcon icon='user-cog' />;
+            iconToReturn = <Icon icon='settings' size="huge"/>;
             break;        
         case 'signin':
-            iconToReturn = <FontAwesomeIcon icon='sign-in-alt' />;
+            iconToReturn = <Icon name='sign in' size="huge"/>;
             break;        
         case 'signout':
-            iconToReturn = <FontAwesomeIcon icon="power-off" />;
+            iconToReturn = <Icon name="power off" size="huge"/>;
             break;
         case 'doc':
-            iconToReturn = <FontAwesomeIcon icon='file-alt' />;
+            iconToReturn = <Icon name='file alternate' size="huge"/>;
             break;        
         case 'new-commment':
-            iconToReturn = <FontAwesomeIcon icon='comment-alt' />;
+            iconToReturn = <Icon name='comment' size="huge"/>;
             break;        
         case 'cancel-comment':
-            iconToReturn = <FontAwesomeIcon icon='window-close' />;
+            iconToReturn = <Icon name='cancel' size="huge"/>;
             break;        
         case 'add-friend':
-            iconToReturn = <FontAwesomeIcon icon='user-check' />;
+            iconToReturn = <Icon name='add user' size="huge"/>;
             break;
         case 'search':
-            iconToReturn = <FontAwesomeIcon icon="search" />;
+            iconToReturn = <Icon name="search" size="huge"/>;
         case 'srch-users':
-            iconToReturn = <img src={searchUsersIcon} style={{height: '50px', width: '100px'}} />;
+            iconToReturn = <Icon name='users'size="huge"/>;
         default:   
             break;
     }
@@ -134,12 +155,24 @@ export const fragments = {
             dateCreated
         }
     `,
+    postPage: gql`
+        fragment postFields on Post {
+            __typename
+            id
+            title
+            image
+            dateCreated
+            tags
+            deletedInd   
+        }
+    `,
     comment: gql`
         fragment commentFields on Comment {
             __typename
             id
             postId
             username
+            avatar
             body
             dateCreated
             dateUpdated
@@ -147,4 +180,12 @@ export const fragments = {
             permanentlyDeletedInd
         }
     `,
+}
+
+export function checkUserLoggedIn(state, dispatch) {
+    const userInLocalStorage = localStorage.getItem('user');
+    if(!state.currentUser || state.currentUser != userInLocalStorage) {
+        dispatch({type: ActionTypes.SET_USER, user: userInLocalStorage});
+    }
+    return;
 }

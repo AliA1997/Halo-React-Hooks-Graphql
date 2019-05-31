@@ -1,9 +1,10 @@
 import React from 'react';
 import { Card, Image, Header, Label, CardContent } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import dateFns from 'date-fns';
 
 const PostItem = ({history, id, title, image, dateCreated}) => {
-    console.log('title-----------', title);
+    
     return (
         <Card onClick={() => history.push(`/posts/${id}`)}>
             

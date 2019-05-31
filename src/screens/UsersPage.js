@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Container, Segment, Header } from 'semantic-ui-react';
+import { Container, Segment, Header, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -7,7 +7,6 @@ import { UserContext } from '../contexts/user/userReducer';
 import * as ActionTypes from '../contexts/user/userActionTypes';
 import userApi from '../api/users/userApi';
 import UserItem from '../components/UserItem';
-import LoadingScreen from '../components/LoadingScreen';
 import SearchBar from '../components/SearchBar';
 import * as utils from '../utils';
 import * as styles from '../styles';
@@ -80,7 +79,7 @@ const UsersPage = ({history, client}) => {
                     );
                 }
 
-                return <LoadingScreen />
+                return <Loader disabled />
             }}
         </Query>
     );

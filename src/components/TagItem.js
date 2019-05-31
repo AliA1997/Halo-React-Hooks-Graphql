@@ -1,10 +1,14 @@
 import React from 'react';
+import { Comment, Button, Icon } from 'semantic-ui-react';
 
-const TagItem = ({tag, onClick}) => {
+const TagItem = ({value, text, onClick}) => {
     return (
-        <div onClick={onClick} className="tag">
-            <h4 className="tag-text">{tag}</h4>
-        </div>
+        <Comment onClick={e => onClick(e, value)}>
+            <Comment.Content>
+                {text}
+                <Icon name="close" color="red" />
+            </Comment.Content>
+        </Comment>
     );
 };
 

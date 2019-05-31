@@ -1,5 +1,5 @@
 import React, { useReducer, useContext, useState, useEffect, useRef } from 'react';
-import { Button, Container, Form, Segment, Image, Header, Input } from 'semantic-ui-react';
+import { Button, Container, Form, Segment, Image, Header, Input, Loader } from 'semantic-ui-react';
 import { ApolloConsumer } from 'react-apollo';
 import { toast } from 'react-toastify';
 //import your context and reducer for that context.
@@ -7,7 +7,6 @@ import { UserContext} from '../contexts/user/userReducer';
 import * as ActionTypes from '../contexts/user/userActionTypes';
 import * as utils from '../utils';
 import * as styles from '../styles';
-import LoadingScreen from '../components/LoadingScreen';
 import UserApi from '../api/users/userApi';
 import { withRouter } from 'react-router-dom';
 import haloLogo from '../halo-logo.svg';
@@ -39,7 +38,7 @@ const LoginPage = ({history, client}) => {
         try {
             const { data } = await new UserApi(client).login(authForm);
         
-            dispatch({type: ActionTypes.LOGIN, loggedInUser: data.login});
+            dispatch({type: ActionTypes.LOGIN, loggedInUser: data.login, loggedInUserString: JSON.stringify(data.login)});
 
             setAuthForm({username: '', password: ''});
 
@@ -58,8 +57,9 @@ const LoginPage = ({history, client}) => {
             cancelAnimationFrame(ref.current);
     }, null)
 
+
     return (
-        <Segment size="massive" style={styles.loginPageContainer} vertical={true} textAlign='center'>
+        <Segment size="massive" style={styles.loginPageContainer()} vertical={true} textAlign='center'>
             <Segment.Group size="massive" style={styles.loginPageSubContainer}>
                 <Image src={haloLogo} size="small" style={styles.image}/>
                 <Header.Content as="h1">Helo</Header.Content>

@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Router } from 'react-router-dom';
 import UserProvider from './contexts/user/UserProvider';
+
 import PostProvider from './contexts/post/PostProvider';
 import CommentProvider from './contexts/comment/CommentProvider';
 import { createBrowserHistory } from 'history';
@@ -17,8 +18,10 @@ import './App.css';
 library.add(faHotel, faFileAlt, faSignInAlt, faCommentAlt, faWindowClose, faPlusCircle, faUserCog, faUserCheck, faPowerOff, faBars, faSearch);
 
 const client = new ApolloClient({
-    link: new HttpLink({uri: `http://localhost:4555/graphql`, useGETForQueries: true}),
-    cache: new InMemoryCache({addTypename: false})
+    //In order to pass session to server make sure to set your credentials for graphql client.
+    link: new HttpLink({uri: `http://localhost:4555/graphql`, useGETForQueries: true, credentials: 'same-origin'}),
+    cache: new InMemoryCache({addTypename: false}).restore(window.__APOLLO_CLIENT__),
+    ssrForceFetchDelay: 200
 });
 
 //Define our browser history

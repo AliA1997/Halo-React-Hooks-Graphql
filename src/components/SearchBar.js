@@ -17,7 +17,7 @@ const SearchBar = ({client, searchFunc, type}) => {
             <Segment.Inline>
                 <Input value={searchValue} onChange={e => handleChange(e.target.value)} placeholder={`Search ${_.capitalize(type)}.....`} />
                 
-                <Button onClick={e => searchFunc(e, searchValue, client)}>
+                <Button onClick={e => searchFunc(e, searchValue)}>
                     <Icon name="search" size="large" />
                 </Button>
                 {

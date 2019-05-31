@@ -1,6 +1,4 @@
 const utils = require('../utils/index');
-const UserItem = require('../classes/users/UserItem');
-const User = require('../classes/users/User');
 const PasswordHasher = require('../classes/misc/PasswordHasher');
 //IMport firebase to query based on id using firebase.firestore.FieldBPath.documentId()
 const firebase = require('firebase');
@@ -10,7 +8,7 @@ module.exports = {
     Query: {
         getAllUsers: async (parent, args, context, info) => {
             let usersToReturn = [];
-            const db = context.db;
+            const db = context.req.db;
 
             //Get the users from the firestore via the collection method. with the get method that will get all data from that collection.
             return db.collection('users').orderBy(firebase.firestore.FieldPath.documentId()).limit(20).get()
@@ -26,8 +24,17 @@ module.exports = {
                             const user = userDoc.data();
 
 
-                            usersToReturn.push(new UserItem(userDoc.id, user.username, user.avatar, user.dateRegistered));
-                        
+                            usersToReturn.push(new utils.InputWrapper(
+                                                                    'user',
+                                                                    docRef.id, 
+                                                                    user.username, 
+                                                                    user.dateRegistered,
+                                                                    user.avatar, 
+                                                                    user.dateUpdated,
+                                                                    user.deletedInd,
+                                                                    user.permanentlyDeletedInd
+                                                                ).returnObj('user')
+                                                            );                        
                         });
                         //Your result will be a object that will require the use of the data method to retrieve data for that query.
                         //Map over the array and get the data from each document.s
@@ -39,7 +46,7 @@ module.exports = {
         searchUsers: (_, args, context) => {
             let usersToReturn;
             const searchVal = args.searchVal,
-                  db = context.db;
+                  db = context.req.db;
 
             return db.collections('users').orderBy('username').startAt(searchVal).endAt(searchVal, '\uf8ff').get()
                 .then(querySnapshot => {
@@ -48,7 +55,17 @@ module.exports = {
 
                         const user = docRef.data();
 
-                        usersToReturn.push(new UserItem(docRef.id, user.username, user.avatar, user.dateRegistered));
+                        usersToReturn.push(new utils.InputWrapper(
+                                                                'user',
+                                                                docRef.id, 
+                                                                user.username, 
+                                                                user.dateRegistered,
+                                                                user.avatar, 
+                                                                user.dateUpdated,
+                                                                user.deletedInd,
+                                                                user.permanentlyDeletedInd
+                                                            ).returnObj('user')
+                                                        );
                     });
 
                     return usersToReturn;
@@ -58,7 +75,7 @@ module.exports = {
         getUser: (_, args, context) => {
             let userToReturn;
             const userId = args.id;
-            const db = context.db;
+            const db = context.req.db;
             
             const socialMediaPlaceholder = {
                 facebook: '',
@@ -88,7 +105,7 @@ module.exports = {
     Mutation: {
         login: (parent, args, context, info) => {
             const { username, password } = args.loginForm,
-                  { db, session } = context;
+                  { db, session } = context.req;
                 
             return db.collection('users').where('username', '==', username).get()
                 .then((querySnapshot) => {
@@ -96,8 +113,10 @@ module.exports = {
 
                     if(querySnapshot.docs.length) {
                         userInfo = querySnapshot.docs[0].data();
+                        userInfo.id = querySnapshot.docs[0].id;
                         //Use resolverUtils to get Reference value object since it will timeout before the .then is completed.
                         userInfo.socialMediaInfo = resolverUtils.getReferenceValue(userInfo, 'socialMedia');
+                        // console.log('userInfo---------------------', userInfo);
                     }
                     return userInfo || false;
                 })
@@ -112,8 +131,12 @@ module.exports = {
 
                     if(!doPasswordsMatch)
                         throw new Error("Invalid password or username!");
+                    
+                    delete resultToReturn.socialMedia;
 
                     session.user = resultToReturn;
+                    
+                    session.save();
 
                     delete resultToReturn.socialMedia;
 
@@ -122,9 +145,9 @@ module.exports = {
         },
         register: async (parent, args, context, info) => {
             const { username, password, avatar, age, dateRegistered } = args.registerForm,
-                  { db, session } = context,
+                  { db, session } = context.req,
                    hashedPassword = await PasswordHasher.generatePasswordHash(password),
-                   userToRegister = new utils.InputWrapper("user", username, password, avatar, age, dateRegistered).returnObj("user");
+                   userToRegister = new utils.InputWrapper("register", username, password, avatar, age, dateRegistered, '', 0, 0).returnObj("register");
             
            userToRegister.password = hashedPassword;
 
@@ -134,27 +157,106 @@ module.exports = {
                     //NOw retrieve the id using the doc reference id.
                     return db.collection('users').doc(docsRef.id).get()
                         .then((docToReturn) => {
+                            console.log('docToReturn--------------', docToReturn.data());
                             return docToReturn.data();
                         })
                 })
                 .then((resultToReturn) => {
                     session.user = resultToReturn;
+                    session.save();
                     return resultToReturn;
+                })
+                .then((userRes) => {
+                    return db.collection('socialMedia').add(
+                        new utils.InputWrapper('socialMedia', '', '', '', '').returnObj('socialMedia')
+                    );
+                })
+                .then(() => {
+                    return session.user;
                 })
         },
         logout: (_, args, context) => {
-            context.session.user = null;
+            context.req.session.destroy();
             return;
         },
         updateUser: (_, args, context) => {
-            const { username, avatar, age, dateUpdated } = args.userForm,
-                  userId = args.userId;
-            // const userToUpdate = new utils.InputWrapper("user", username, avatar)
-      
+            const { userId, updateUserForm } = args, 
+                  { username, avatar, age, dateRegistered, dateUpdated } = updateUserForm,
+                  { db } = context.req,
+                  userToUpdate = new utils.InputWrapper(
+                                                'user',
+                                                userId,
+                                                username,
+                                                avatar,
+                                                age,
+                                                dateRegistered,
+                                                dateUpdated,
+                                                0,
+                                                0
+                                            ).returnObj('user');
+
+            const userDocToUpdate = db.collection('users').doc(userId);
+            return db.collection('users').doc(userId).update(userToUpdate)
+                .then(() => {
+                    console.log(`User with id of ${userId} successfully updated.`);
+                    return userDocToUpdate.get();
+                })
+                .then(docRef => {
+                    return {
+                        id: docRef.id,
+                        ...docRef.data()
+                    };
+                }).catch(err => console.log('Update User Error--------', err))
+
+                  
+        },
+        updateSocialMedia: (_, args, context) => {
+            const { userId, socialMediaForm, socialMediaId } = args,
+                  { type, value } = socialMediaForm,
+                  { db } = context.req;
+                
+            const smToUpdate = db.collection('socialMedia').doc(socialMediaId);
+
+            let socialMediaToReturn;
+            
+            return db.collection('users').doc(userId).get()
+                .then(docRef => {
+                    return (docRef.userId == userId);
+                })
+                .then(isUser => {
+                    if(isUser)
+                        throw new Error('User not found.');
+                    return smToUpdate.get();
+                })
+                .then(smDocRef => {
+                    console.log(smToUpdate);
+                    const smInfo = smDocRef.data();
+                    const updatedSocialMedia = resolverUtils.determineTypeOfSm(type, value, smInfo, socialMediaId);
+                    socialMediaToReturn = updatedSocialMedia;
+                    return smToUpdate.update(updatedSocialMedia);
+                })
+                .then(() => {
+                    return socialMediaToReturn;
+                })
+                .catch(err => console.log('Update Social Media Error---------------', err))
         },
         deleteUser: (_, args, context) => {
-            const userId = args.userId;
-      
+            const userId = args.userId,
+                  { db } = context.req, 
+                  deletedUser = { deletedInd: 1, permanentlyDeletedInd: 0 };
+            //Define a unresolved promise that will be used to soft delete the document
+            const userToDelete = db.collection('users').doc(userId);
+
+            return db.collection('users').doc(userId).get()
+                .then(docRef => {
+                    return userToDelete.update(deletedUser)
+                })
+                .then(() => {
+                    const successMessage = `User with an id of ${userId} deleted successfully!`;
+                    console.log(successMessage);
+                    return { body: successMessage };
+                })
+                .catch(error => console.log("Error deleting user------------------", error));
         }
     }
 }

@@ -1,3 +1,4 @@
+import * as utils from './utils';
 
 export const container ={
         background: 'linear-gradient(#FF70A6, #FF9770, #FFD670, #E9FF70)',
@@ -18,17 +19,29 @@ export const navbar = {
     height: '100vh',
 };
 
+export const navbarColumn = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    flexDirection: 'column'
+}
+
 export const image = {
     marginLeft: 'auto', 
     marginRight: 'auto'
 };
 
-export const loginPageContainer = {
-    background: 'linear-gradient(#FF70A6, #FF9770, #FFD670, #E9FF70)',
-    height: '100%', 
-    width: '80%',
-    display: 'flex',
-    ...flexColumn
+export const loginPageContainer = () => {
+    const browserWidth = utils.getBrowserWidth();
+    return {
+        background: 'linear-gradient(#FF70A6, #FF9770, #FFD670, #E9FF70)',
+        height: '100%', 
+        width: '80%',
+        display: 'flex',
+        ...flexColumn,
+        width: browserWidth < 1024 && browserWidth > 760 ? '600px' : browserWidth < 760 ? '400px' : 'initial'
+    };
 };
 
 export const loginPageSubContainer = {
@@ -43,4 +56,21 @@ export const fullWidth = {
 
 export const icon = {
     marginLeft: '10px'
+};
+
+
+export const commentActionWidth = {
+    width: '150px'
+};
+
+export const lastCommentAction = {
+    ...commentActionWidth, 
+    marginTop: '5px'
+};
+
+export const commentActionIcon = {
+    marginLeft: '10px'
+};
+export const lastCommentActionIcon = {
+    marginLeft: '20px'
 };

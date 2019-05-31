@@ -7,10 +7,17 @@ import userInitialState from './userInitialState';
 export const UserReducer = (state=userInitialState, action) => {
     switch(action.type) {
         case UserActionTypes.LOGIN:
+            localStorage.setItem('user', action.loggedInUserString);
             return utils.deepCopy({
                 ...state,
                 ...{ currentUser: action.loggedInUser }
             });
+        case UserActionTypes.SET_USER:
+            const userObj = JSON.parse(action.user);
+            return utils.deepCopy({
+                ...state,
+                ...{ currentUser: userObj }
+            })
         case UserActionTypes.LOGOUT:
             return utils.deepCopy({
                 ...state,
