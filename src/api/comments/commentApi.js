@@ -1,8 +1,9 @@
 import gql from 'graphql-tag';
+import * as utils from '../../utils';
 
 const createCommentMutation = gql`
     mutation CreateComment($commentForm: CommentForm) {
-        createComment(commentForm: commentForm) {
+        createComment(commentForm: $commentForm) {
             username
             avatar
             body
@@ -30,11 +31,10 @@ const deleteCommentMutation = gql`
 `;
 
 const getCommentsQuery = gql`
+    ${utils.fragments.comment}
     query GetComments($postId: String) {
-        getComments(id: $postId) {
-            username
-            body
-            dateCreated
+        comments:getComments(id: $postId) {
+            ...commentFields
         }
     }
 `;
@@ -47,7 +47,7 @@ class CommentApi {
 
     getComments(postId) {
         //Set your fetch policy to cache and network  to retrieve data via api request first and update cache
-        return this.client.query({query: getCommentsQuery, variables: { postId: postId }, fetchPolicy: 'cache-and-network'});
+        return this.client.watchQuery({query: getCommentsQuery, variables: { postId: postId }, fetchPolicy: 'cache-and-network'});
     }
 
     getCommentsOffline(postId) {

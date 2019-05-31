@@ -34,6 +34,7 @@ const getSingleUserQuery = gql`
 const loginMutation = gql`
     mutation Login($loginForm: LoginInput!) {
         login(loginForm: $loginForm) {
+            id
             username
             avatar
             age
@@ -45,6 +46,7 @@ const loginMutation = gql`
 const registerMutation = gql`
     mutation Register($registerForm: RegisterInput!) {
         register(registerForm: $registerForm) {
+            id
             username
             avatar
             age

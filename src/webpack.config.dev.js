@@ -1,5 +1,9 @@
+require('dotenv').config();
 const htmlPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
+
+console.log('WEBPACK PROCESS>ENV_________________', process.env);
 
 module.exports = {
     entry: {
@@ -149,6 +153,16 @@ module.exports = {
             template: path.resolve(__dirname, 'index.html'),
             // chunks: [chunks],
             filename: path.resolve(__dirname, 'dist/index.html')
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'FIREBASE_API_KEY': JSON.stringify(process.env.REACT_APP_FIREBASE_API_KEY),
+                'FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.REACT_APP_FIREBASE_AUTH_DOMAIN),
+                'FIREBASE_DB_URL': JSON.stringify(process.env.REACT_APP_FIREBASE_DB_URL),
+                'PROJECT_ID': JSON.stringify(process.env.REACT_APP_FIREBASE_PROJECT_ID),
+                'FIREBASE_STORAGE_BUCKET': JSON.stringify(process.env.REACT_APP_FIREBASE_STORAGE_BUCKET),
+                'FIREBASE_MESSAGE_ID': JSON.stringify(process.env.REACT_APP_FIREBASE_MESSAGE_ID)
+            }
         })
     ]
 }

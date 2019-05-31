@@ -13,7 +13,7 @@ const getPostsQuery = gql`
 const getUserPostsQuery = gql`
     ${utils.fragments.post}
     query GetUserPosts($userId: String) {
-        getUserPosts(userId: $userId) {
+        posts:getUserPosts(userId: $userId) {
             ...postItemFields
         }
     }
@@ -22,7 +22,7 @@ const getUserPostsQuery = gql`
 const searchPostsQuery = gql`
     ${utils.fragments.post}
     query SearchPosts($searchVal: String) {
-        searchPosts(searchVal: $searchVal) {
+        posts:searchPosts(searchVal: $searchVal) {
             ...postItemFields
         }
     }
@@ -31,30 +31,26 @@ const searchPostsQuery = gql`
 const searchUserPostsQuery = gql`
     ${utils.fragments.post}
     query SearchUserPosts($searchVal: String, $userId: String) {
-        searchUserPosts(searchVal: $searchVal, userId: $userId) {
+        posts:searchUserPosts(searchVal: $searchVal, userId: $userId) {
             ...postItemFields
         }
     }
 `;
 
 const getSinglePostQuery = gql`
-    ${utils.fragments.post}
+    ${utils.fragments.postPage}
     query GetSinglePost($postId: String) {
         post:getPost(id: $postId) {
-            ...postItemFields
-            tags
-            deletedInd
-            permanentlyDeletedInd    
+            ...postFields
         }
     }
 `;
 
 const createPostMutation = gql`
-    mutation CreatePost($userId: String, $postForm: PostInput) {
+    ${utils.fragments.post}
+    mutation CreatePost($userId: String, $postForm: PostForm) {
         createPost(postForm: $postForm, userId: $userId) {
-            title
-            image
-            dateCreated
+            ...postItemFields
         }
     }
 `;
@@ -62,6 +58,7 @@ const createPostMutation = gql`
 const updatePostMutation = gql`
     mutation UpdatePost($userId: String, $postId: String, $updatedPost: UpdatePostInput) {
         updatePost(updatedPost: $updatedPost, postId: $postId, userId: $userId) {
+            id
             title
             image
             dateCreated
