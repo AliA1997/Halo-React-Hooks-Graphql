@@ -8,10 +8,10 @@ module.exports = {
     Query: {
         getAllUsers: async (parent, args, context, info) => {
             let usersToReturn = [];
-            const db = context.req.db;
+            const { db } = context.req;
 
             //Get the users from the firestore via the collection method. with the get method that will get all data from that collection.
-            return db.collection('users').orderBy(firebase.firestore.FieldPath.documentId()).limit(20).get()
+            return db.collection('users').where('deletedInd', '==', 0).orderBy(firebase.firestore.FieldPath.documentId()).limit(20).get()
                     .then((querySnapshot) => {
                        
                         //Retrieve the last document and the next documents using the last document.
@@ -24,17 +24,19 @@ module.exports = {
                             const user = userDoc.data();
 
 
-                            usersToReturn.push(new utils.InputWrapper(
-                                                                    'user',
-                                                                    docRef.id, 
-                                                                    user.username, 
-                                                                    user.dateRegistered,
-                                                                    user.avatar, 
-                                                                    user.dateUpdated,
-                                                                    user.deletedInd,
-                                                                    user.permanentlyDeletedInd
-                                                                ).returnObj('user')
-                                                            );                        
+                            usersToReturn.push(
+                                new utils.InputWrapper(
+                                    'user',
+                                    userDoc.id,
+                                    user.username,
+                                    user.avatar,
+                                    user.age,
+                                    user.dateRegistered,
+                                    user.dateUpdated,
+                                    user.deletedInd,
+                                    user.permanentlyDeletedInd
+                                ).returnObj('uItem')
+                            );                        
                         });
                         //Your result will be a object that will require the use of the data method to retrieve data for that query.
                         //Map over the array and get the data from each document.s
@@ -44,28 +46,30 @@ module.exports = {
         },
 
         searchUsers: (_, args, context) => {
-            let usersToReturn;
-            const searchVal = args.searchVal,
-                  db = context.req.db;
+            let usersToReturn = [];
+            const { searchVal } = args,
+                  { db } = context.req;
 
-            return db.collections('users').orderBy('username').startAt(searchVal).endAt(searchVal, '\uf8ff').get()
+            return db.collection('users').where('deletedInd', '==', 0).orderBy('username').startAt(searchVal).get()
                 .then(querySnapshot => {
                     
-                    querySnapshot.forEach(docRef => {
+                    querySnapshot.forEach(userDoc => {
 
-                        const user = docRef.data();
+                        const user = userDoc.data();
 
-                        usersToReturn.push(new utils.InputWrapper(
-                                                                'user',
-                                                                docRef.id, 
-                                                                user.username, 
-                                                                user.dateRegistered,
-                                                                user.avatar, 
-                                                                user.dateUpdated,
-                                                                user.deletedInd,
-                                                                user.permanentlyDeletedInd
-                                                            ).returnObj('user')
-                                                        );
+                        usersToReturn.push(
+                            new utils.InputWrapper(
+                                'user',
+                                userDoc.id,
+                                user.username,
+                                user.avatar,
+                                user.age,
+                                user.dateRegistered,
+                                user.dateUpdated,
+                                user.deletedInd,
+                                user.permanentlyDeletedInd
+                            ).returnObj('uItem')
+                        );
                     });
 
                     return usersToReturn;
@@ -74,8 +78,9 @@ module.exports = {
 
         getUser: (_, args, context) => {
             let userToReturn;
-            const userId = args.id;
-            const db = context.req.db;
+            console.log('args--------------', args);
+            const { id } = args,
+                  { db } = context.req;
             
             const socialMediaPlaceholder = {
                 facebook: '',
@@ -84,21 +89,43 @@ module.exports = {
                 twitter: ''
             };
             //To query a single document use the doc method and pass your doc id, that will retrieve a single document.
-            return db.collection('users').doc(userId).get()
-                    .then((querySnapshot) => {
-                    
+            return db.collection('users').doc(id).get()
+                    .then((docRef) => {
+                        
                         //Retrieve the data from the query snapshot.
-                        const user = querySnapshot.data();                        
-
+                        const user = docRef.data();                        
+                        console.log('user---------------', user);
                         //Then define a new instance of the user
-                        userToReturn = new User(querySnapshot.id, user.username, user.password, user.avatar, user.age, user.dateRegistered, [""], socialMediaPlaceholder);
+                        userToReturn = new utils.InputWrapper(
+                                                                "user", 
+                                                                docRef.id, 
+                                                                user.username, 
+                                                                user.avatar, 
+                                                                user.age, 
+                                                                user.dateRegistered, 
+                                                                user.dateUpdated, 
+                                                                user.deletedInd, 
+                                                                user.permanentlyDeletedInd
+                                                            ).returnObj('user');
                         
                         userToReturn.friends = [""];
 
+                        console.log("userToReturn---------------", userToReturn);
                         //Return the user queried.
                         return userToReturn;
 
-                    });
+                    })
+                    .then(userInfo => {
+                        userInfo.socialMediaInfo = new utils.InputWrapper(
+                                                                            'socialMedia',
+                                                                            socialMediaPlaceholder.facebook,
+                                                                            socialMediaPlaceholder.instagram,
+                                                                            socialMediaPlaceholder.linkedin,
+                                                                            socialMediaPlaceholder.twitter
+                                                                    ).returnObj("socialMedia");
+                        
+                        return userInfo;
+                    }).catch(err => console.log('Get User Error-------------', err));
         },
     },
     

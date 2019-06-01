@@ -81,3 +81,26 @@ Napi::Object UpdateP::returnObj(Napi::Env env) {
 
     return objToReturn;
 }
+
+Napi::Object UpdateP::returnItemObj(Napi::Env env){
+    Napi::Object objToReturn = Napi::Object::New(env);
+
+    Napi::String idKey = Napi::String::New(env, "id");
+    Napi::String idValue = Napi::String::New(env, this->id_);
+    
+    Napi::String titleKey = Napi::String::New(env, "title");
+    Napi::String titleValue = Napi::String::New(env, this->title_);
+
+    Napi::String imageKey = Napi::String::New(env, "image");
+    Napi::String imageValue = Napi::String::New(env, this->image_);
+
+    Napi::String dateCreatedKey = Napi::String::New(env, "dateCreated");
+    Napi::String dateCreatedValue = Napi::String::New(env, this->dateCreated_);
+
+    objToReturn.Set(idKey, idValue);
+    objToReturn.Set(titleKey, titleValue);
+    objToReturn.Set(imageKey, imageValue);
+    objToReturn.Set(dateCreatedKey, dateCreatedValue);
+
+    return objToReturn;
+}

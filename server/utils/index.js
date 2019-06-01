@@ -6,7 +6,7 @@ try {
     // const registerObj = new utils.InputWrapper('register', 'username', 'password', 'avatar', 21, 'dateRegistered', '', 0, 0);
     // const userUpdateObj = new utils.InputWrapper('user', 'id', 'username', 'avatar', 21, 'dateRegistered', '', 0, 0);
     // // const socialMediaObj = new utils.InputWrapper('socialMedia', 'id', 'ins', 'link',  'twitter');
-    // const postObj = new utils.InputWrapper('post', 'title', 'Image', 'dateCreaed', '', 0, 0, 'userId');
+    // const postObj = new utils.InputWrapper('post', 'title', 'Image', 'dateCreaed', '', 0, 0, 'userId', `['a', 'b']`);
     // const updatePObj = new utils.InputWrapper('update-p', 'id', 'title', 'Image', 'dateCreaed', '', 0, 0, 'userId');
     // const updateCObj = new utils.InputWrapper('update-c', 'id', 'username', 'body', 'dateCreaed', 'avatar', 'dateUpdate', 0, 0, 'postId');
 
@@ -19,11 +19,11 @@ try {
 
     // // // console.log('utils socialMedia---------------------', socialMediaObj.returnObj('socialMedia'));
 
-    // console.log('utils update-user---------------------', userUpdateObj.returnObj('user'));
+    // console.log('utils update-user---------------------', userUpdateObj.returnObj("uItem"));
     
     // console.log('utils--------------------- updateC', updateCObj.returnObj('update-c'));
 
-    // console.log('utils--------------- updateP', updatePObj.returnObj('update-p'));
+    // console.log('utils--------------- updateP', updatePObj.returnObj('pItem'));
 
     // console.log('utiles---------------', smUpdateObj.returnObj('update-sm'));
 

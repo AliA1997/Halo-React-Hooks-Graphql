@@ -16,19 +16,19 @@ module.exports = {
                         const post = postDoc.data();
 
                         if(post)
-                            postsToReturn.push(new utils.InputWrapper(
-                                                'update-p',
-                                                postDoc.id, 
-                                                post.title, 
-                                                post.image, 
-                                                post.dateCreated, 
-                                                post.dateUpdated,
-                                                post.deletedInd,
-                                                post.permanentlyDeletedInd,
-                                                post.userId
-                                            ).returnObj('update-p')
-                    
-                                        );
+                            postsToReturn.push(
+                                new utils.InputWrapper(
+                                    'update-p',
+                                    postDoc.id, 
+                                    post.title, 
+                                    post.image, 
+                                    post.dateCreated,
+                                    post.dateUpdated,
+                                    post.deletedInd,
+                                    post.permanentlyDeletedInd,
+                                    post.userId
+                                ).returnObj('pItem')
+                            );
 
                     });
                     
@@ -40,15 +40,14 @@ module.exports = {
         getPost: (_, args, context) => {
             let postToReturn;
 
-            const postId = args.id,
-                  db = context.req.db;
+            const { id } = args,
+                  { db } = context.req;
 
             //Use .doc to get a specific document.
-            return db.collection('posts').doc(postId).get()
-                .then((querySnapshot) => {
+            return db.collection('posts').doc(id).get()
+                .then((postDoc) => {
                     
-                    const postDoc = querySnapshot,
-                          post = postDoc.data();
+                    const post = postDoc.data();
 
                     postToReturn = new utils.InputWrapper(
                                         'update-p',
@@ -69,9 +68,9 @@ module.exports = {
         },
         
         getPosts: (_, args, context) => {
-            let postsToReturn;
-            const userId = args.userId,
-                  db = context.req.db;
+            let postsToReturn = [];
+            const { userId } = args,
+                  { db } = context.req;
 
             return db.collection('posts').where('userId', '==', userId).get()
                 .then((querySnapshot) => {
@@ -83,18 +82,19 @@ module.exports = {
                         const post = postDoc.data();
 
                         //Push it ot your postsToReturn
-                        postsToReturn.push(new utils.InputWrapper(
-                                                                'update-p',
-                                                                postDoc.id, 
-                                                                post.title, 
-                                                                post.image, 
-                                                                post.dateCreated,
-                                                                post.dateUpdated,
-                                                                post.deletedInd,
-                                                                post.permanentlyDeletedInd,
-                                                                post.userId
-                                                        ).returnObj('update-p')
-                                            );
+                        postsToReturn.push(
+                            new utils.InputWrapper(
+                                'update-p',
+                                postDoc.id, 
+                                post.title, 
+                                post.image, 
+                                post.dateCreated,
+                                post.dateUpdated,
+                                post.deletedInd,
+                                post.permanentlyDeletedInd,
+                                post.userId
+                            ).returnObj('pItem')
+                        );
                     
                     });
 
@@ -105,27 +105,28 @@ module.exports = {
         },
 
         searchPosts: (_, args, context) => {
-            let postsToReturn;
-            const searchValue = args.searchValue,
-                  db = context.req.db;
+            let postsToReturn = [];
+            const { searchVal } = args,
+                  { db } = context.req;
 
-            return db.collection('posts').orderBy('title').startAt(searchValue).endAt(searchValue+'\uf8ff').get()
+            return db.collection('posts').orderBy('title').startAt(searchVal).get()
                 .then(querySnapshot => {
-                    querySnapshot.forEach(docRef => {
-                        const post = docRef.data();
+                    querySnapshot.forEach(postDoc => {
+                        const post = postDoc.data();
 
-                        postsToReturn.push(new utils.InputWrapper(
-                                                                'update-p',
-                                                                docRef.id, 
-                                                                post.title, 
-                                                                post.image, 
-                                                                post.dateCreated,
-                                                                post.dateUpdated,
-                                                                post.deletedInd,
-                                                                post.permanentlyDeletedInd,
-                                                                post.userId
-                                                            ).returnObj('update-p')
-                                            );
+                        postsToReturn.push(    
+                                        new utils.InputWrapper(
+                                            'update-p',
+                                            postDoc.id, 
+                                            post.title, 
+                                            post.image, 
+                                            post.dateCreated,
+                                            post.dateUpdated,
+                                            post.deletedInd,
+                                            post.permanentlyDeletedInd,
+                                            post.userId
+                                        ).returnObj('pItem')
+                        );
                     });
 
                     return postsToReturn;
@@ -135,29 +136,29 @@ module.exports = {
         },
 
         searchUserPosts: (_, args, context) => {
-            let postsToReturn;
-            const searchValue = args.searchValue,
-                  userId = args.userId,
-                  db = context.req.db;
+            let postsToReturn = [];
+            const { searchVal, userId } = args,
+                  { db } = context.req;
 
-            return db.collection('posts').where('userId', '==', userId).orderBy('title').startAt(searchValue).endAt(searchValue+'\uf8ff').get()
+            return db.collection('posts').where('userId', '==', userId).orderBy('title').startAt(searchVal).get()
                 .then(querySnapshot => {
                     
-                    querySnapshot.forEach(docRef => {
-                        const post = docRef.data();
+                    querySnapshot.forEach(postDoc => {
+                        const post = postDoc.data();
 
-                        postsToReturn.push(new utils.InputWrapper(
-                                                                'update-p',
-                                                                docRef.id, 
-                                                                post.title, 
-                                                                post.image, 
-                                                                post.dateCreated,
-                                                                post.dateUpdated,
-                                                                post.deletedInd,
-                                                                post.permanentlyDeletedInd,
-                                                                post.userId
-                                                            ).returnObj('update-p')
-                                            );
+                        postsToReturn.push(    
+                            new utils.InputWrapper(
+                                'update-p',
+                                postDoc.id, 
+                                post.title, 
+                                post.image, 
+                                post.dateCreated,
+                                post.dateUpdated,
+                                post.deletedInd,
+                                post.permanentlyDeletedInd,
+                                post.userId
+                            ).returnObj('pItem')
+                        );
                     })
 
                     return postsToReturn;

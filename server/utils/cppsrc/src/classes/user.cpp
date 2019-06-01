@@ -81,3 +81,26 @@ Napi::Object User::returnObj(Napi::Env env) {
 
     return objToReturn;
 }
+
+Napi::Object User::returnItemObj(Napi::Env env) {
+    Napi::Object objToReturn = Napi::Object::New(env);
+
+    Napi::String idKey = Napi::String::New(env, "id");
+    Napi::String idValue= Napi::String::New(env, this->id_);
+
+    Napi::String usernameKey = Napi::String::New(env, "username");
+    Napi::String usernameValue= Napi::String::New(env, this->username_);
+
+    Napi::String avatarKey = Napi::String::New(env, "avatar");
+    Napi::String avatarValue= Napi::String::New(env, this->avatar_);
+
+    Napi::String dateRegisteredKey = Napi::String::New(env, "dateRegistered");
+    Napi::String dateRegisteredValue= Napi::String::New(env, this->dateRegistered_);
+
+    objToReturn.Set(idKey, idValue);
+    objToReturn.Set(usernameKey, usernameValue);
+    objToReturn.Set(avatarKey, avatarValue);
+    objToReturn.Set(dateRegisteredKey, dateRegisteredValue);
+    
+    return objToReturn;
+}

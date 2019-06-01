@@ -112,6 +112,8 @@ Napi::Value InputWrapper::ReturnObj(const Napi::CallbackInfo& info) {
         //If the type does contain a post string will not equal the max position value. 
     } else if(type.find("user") != std::string::npos) {
         objToReturn = this->user_->returnObj(env);
+    } else if(type.find("uItem") != std::string::npos) {
+        objToReturn = this->user_->returnItemObj(env);
     } else if(type.find("socialMedia") != std::string::npos) {
         objToReturn = this->socialMedia_->returnObj(env);
     } else if(type.find("update-sm") != std::string::npos) {
@@ -121,6 +123,8 @@ Napi::Value InputWrapper::ReturnObj(const Napi::CallbackInfo& info) {
         //If the type does contain a comment string will not equal the max position value.
     } else if(type.find("update-p") != std::string::npos) {
         objToReturn = this->updatedPost_->returnObj(env);
+    } else if(type.find("pItem") != std::string::npos) {
+        objToReturn = this->updatedPost_->returnItemObj(env);
     } else if(type.find("comment") != std::string::npos) {
         objToReturn = this->currentComment_->returnObj(env);
     } else if(type.find("update-c") != std::string::npos) {
@@ -282,7 +286,11 @@ bool InputWrapper::DetermineValidArguments(const Napi::CallbackInfo& info, Napi:
                 //post value and it contains valid arguments
                 (                    
                     info[0].IsString() && compareValue == postCompare 
-                    &&  (info[1].IsString() && info[2].IsString() && info[3].IsString() && info[4].IsString() && info[5].IsNumber() && info[6].IsNumber() && info[7].IsString())
+                    &&  
+                    (
+                        info[1].IsString() && info[2].IsString() && info[3].IsString() && info[4].IsString() 
+                        && info[5].IsNumber() && info[6].IsNumber() && info[7].IsString()
+                    )
                 ) 
                 || 
                 //update post and value and it contain valid arguments

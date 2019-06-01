@@ -12,8 +12,9 @@ class User {
         std::string getDateRegistered();    
         std::string getDateUpdated();
         int getDeletedInd();
-        int getPermanentlyDeletedInd();   
+        int getPermanentlyDeletedInd();  
         Napi::Object returnObj(Napi::Env env);
+        Napi::Object returnItemObj(Napi::Env env);
     private:
         std::string id_;
         std::string username_;

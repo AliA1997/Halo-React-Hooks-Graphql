@@ -36,7 +36,7 @@ const typeDefs = gql`
 
     # use the extend keyword to extend your graphql types it is useful primarily when using multiple type definitions.
     extend type Query {
-        getComments(id: String): [Comment]
+        getComments(postId: String): [Comment]
     }
 
     # use the extend keyword to extend your graphql types it is useful primarily when using multiple type definitions.

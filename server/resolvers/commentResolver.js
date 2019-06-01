@@ -4,8 +4,8 @@ const resolverUtils = require('./resolverUtils');
 module.exports = {
     Query: {
         getComments: (_, args, context) => {
-            const postId = args.id, 
-                 { db } = context.req;
+            const { postId } = args, 
+                  { db } = context.req;
             //Get the comments using the postId
             return db.collection('comments').get()
                 .then(querySnapshot => {
@@ -13,9 +13,9 @@ module.exports = {
                     console.log(querySnapshot.length);
                     querySnapshot.forEach(commentDoc => {
                         const comment = commentDoc.data();
-                        console.log('comment to get-----------------', comment);
-                        const postReferenceId = resolverUtils.getReferenceId(comment, 'postId');
+
                         commentsToReturn.push(new utils.InputWrapper(
+                                                    'update-c',
                                                     commentDoc.id, 
                                                     comment.username, 
                                                     comment.body, 
@@ -24,7 +24,7 @@ module.exports = {
                                                     comment.dateUpdated,
                                                     comment.deletedInd, 
                                                     comment.permanentlyDeletedInd,
-                                                    postReferenceId
+                                                    postId
                                                 ).returnObj('update-c')
                                             );
                     })

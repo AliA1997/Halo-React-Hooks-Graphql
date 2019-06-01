@@ -1,3 +1,40 @@
+////////////////////Query------------------------
+`
+query {
+	getAllUsers{
+    id
+    username
+		avatar 
+    dateRegistered
+  }
+}
+`
+`
+query {
+  searchUsers(searchVal:"i"){
+    id
+    username 
+    avatar
+    dateRegistered
+  } 
+}
+`
+`
+query {
+  getUser(id:"8U1x2fvx3CYWL3rp0ZQO"){
+    id
+    username 
+    avatar
+    dateRegistered
+    socialMediaInfo{
+      facebook
+    }
+    friends
+  } 
+}
+`
+
+////////////////////MUtations------------------------
 `
 mutation {
     register(

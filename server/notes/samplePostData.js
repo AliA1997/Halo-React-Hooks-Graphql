@@ -1,3 +1,47 @@
+//////////////////////Queries------------------------
+`
+query {
+  getAllPosts{
+    id
+    title
+    image
+    dateCreated
+  }
+}
+`
+`
+query {
+  getPosts(userId:"8U1x2fvx3CYWL3rp0ZQO") {
+    id
+    title
+    image
+    dateCreated
+  }
+}
+`
+`
+query {
+  searchPosts(searchVal: "Update") {
+    id
+    title
+    image
+    dateCreated
+  }
+}
+`
+
+`
+query {
+  searchUserPosts(searchVal: "Sample", userId:"8U1x2fvx3CYWL3rp0ZQO") {
+    id
+    title
+    image
+    dateCreated
+  }
+}
+`
+
+//////////////////////Mutation--------------------------
 `
 mutation {
     createPost(

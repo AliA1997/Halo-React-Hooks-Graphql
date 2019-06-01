@@ -39,6 +39,7 @@ const typeDefs = gql`
         image: String
         tags: [String]
         dateCreated: Date
+        dateUpdated: Date
         deletedInd: Boolean
         permanentlyDeletedInd: Boolean
     }

@@ -14,6 +14,7 @@ class UpdateP {
         int getPermanentlyDeleteedInd();
         std::string getUserId();
         Napi::Object returnObj(Napi::Env env);
+        Napi::Object returnItemObj(Napi::Env env);
     private:
         std::string id_;
         std::string title_;
