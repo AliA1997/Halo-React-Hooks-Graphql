@@ -9,8 +9,8 @@ import * as styles from '../styles';
 import dateFns from 'date-fns';
 import _ from 'lodash';
 import data from '../tags.json';
-import TagItem from '../components/TagItem';
-import Dropzone from '../components/Dropzone';
+const TagItem = React.lazy(() => import('../components/TagItem'));
+const Dropzone = React.lazy(() => import('../components/Dropzone'));
 import postPlaceholder from '../postPlaceholder.jpg';
 
 const NewPostPage = ({history, client}) => {

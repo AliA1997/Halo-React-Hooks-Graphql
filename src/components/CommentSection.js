@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Segment, Form, FormField, Input, Loader, Button, Label, Comment } from 'semantic-ui-react';
 import { UserContext } from '../contexts/user/userReducer';
 import dateFns from 'date-fns';
-import CommentItem from './CommentItem';
+const CommentItem = React.lazy(() => import('./CommentItem'));
 import commentApi from '../api/comments/commentApi';
 import { toast } from 'react-toastify';
 
@@ -14,8 +14,8 @@ const CommentSection = ({client, postId}) => {
 
     const [currentComments, setCurrentComments] = useState([]);
 
-    function handleChange(val) {
-        setCreateCommentValue(val);
+    function handleChange(e) {
+        setCreateCommentValue(e.target.value);
     }
  
     async function getComments() {
@@ -84,7 +84,7 @@ const CommentSection = ({client, postId}) => {
                     </Label>
                 </FormField>
                 <FormField>
-                    <Input onChange={e => handleChange(e.target.value)} value={createCommentValue} />
+                    <Input onChange={handleChange} value={createCommentValue} />
                     <Button type="submit">
                         Submit
                     </Button>

@@ -19,6 +19,8 @@ module.exports = {
         filename: 'index.bundle.js',
         //Define your sourceMapFIleName
         sourceMapFilename: '[hash].sourceBundle.js', 
+        //Defien your chunkFileName for code splitting
+        chunkFilename: '[id].bundle.js',
         //To have the bundled file mounted on both browsers and nodejs use this as the global object property
         globalObject: 'this',
         // publicPath: path.resolve(__dirname, '/dist')
@@ -38,6 +40,17 @@ module.exports = {
                 test: /.(js|jsx)$/,
                 use: ['source-map-loader'],
                 enforce: 'pre'
+            },
+            {
+                test: /.bundle.js$/,
+                use: [
+                    {
+                        loader: 'bundle-loader',
+                        options: {
+                            lazy: true
+                        }
+                    }
+                ]
             },
             {
                 test: /.(jsx|js)$/,

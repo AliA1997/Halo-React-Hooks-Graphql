@@ -133,22 +133,36 @@ module.exports = {
         login: (parent, args, context, info) => {
             const { username, password } = args.loginForm,
                   { db, session } = context.req;
-                
+            
             return db.collection('users').where('username', '==', username).get()
                 .then((querySnapshot) => {
-                    let userInfo;
-
                     if(querySnapshot.docs.length) {
-                        userInfo = querySnapshot.docs[0].data();
-                        userInfo.id = querySnapshot.docs[0].id;
-                        //Use resolverUtils to get Reference value object since it will timeout before the .then is completed.
-                        userInfo.socialMediaInfo = resolverUtils.getReferenceValue(userInfo, 'socialMedia');
-                        // console.log('userInfo---------------------', userInfo);
+                        const docRef = querySnapshot.docs[0];
+                        return docRef;
                     }
-                    return userInfo || false;
+                    return undefined;
                 })
+                .then((userDoc) => {
+                    
+                    if(userDoc) {
+                    
+                        let userInfo;
+                    
+                        userInfo = userDoc.data();
+                    
+                        userInfo.id = userDoc.id;
+                    
+                        //Use resolverUtils to get Reference value object since it will timeout before the .then is completed.
+                        // userInfo.socialMediaInfo = resolverUtils.getReferenceValue(db, userDoc.data(), 'socialMediaId');
+                        userInfo.socialMediaInfo = { facebook: '', instagram: '', linkedin: '', twitter: '' };
+                        
+                        return userInfo;
+                    
+                    }
+                    return false;
+                 })
                 .then(async resultToReturn => {
-                    //If the collection cannot find the user info based on the username then throw a new error
+                    // If the collection cannot find the user info based on the username then throw a new error
                     if(!resultToReturn)
                         throw new Error('User not found!');
 
@@ -168,7 +182,8 @@ module.exports = {
                     delete resultToReturn.socialMedia;
 
                     return resultToReturn;
-                });
+                })
+                .catch(err => console.log("Get Login Error---------------", err));
         },
         register: async (parent, args, context, info) => {
             const { username, password, avatar, age, dateRegistered } = args.registerForm,

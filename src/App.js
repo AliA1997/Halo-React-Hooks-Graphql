@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useRef } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { UserContext } from './contexts/user/userReducer';
 import * as ActionTypes from './contexts/user/userActionTypes';
-import AuthenticatedWrapper from './AuthenticatedWrapper';
+const AuthenticatedWrapper = React.lazy(() => import('./AuthenticatedWrapper'));
 import * as styles from './styles';
 import 'react-dropzone-uploader/dist/styles.css';
 

@@ -1,11 +1,12 @@
 import React from 'react';
-import LoginScreen from './screens/LoginPage';
-import Dashboard from './screens/Dashboard';
-import RegisterPage from './screens/RegisterPage';
-import PostPage from './screens/PostPage';
-import UsersPage from './screens/UsersPage';
-import UserPage from './screens/UserPage';
-import NewPostPage from './screens/NewPostPage';
+//Use React.lazy to render a dynamic import as a component.
+const LoginScreen = React.lazy(() => import('./screens/LoginPage'));
+const Dashboard = React.lazy(() => import('./screens/Dashboard'));
+const RegisterPage = React.lazy(() => import('./screens/RegisterPage'));
+const PostPage = React.lazy(() => import('./screens/PostPage'))
+const UsersPage = React.lazy(() => import('./screens/UsersPage'))
+const UserPage = React.lazy(() => import('./screens/UserPage'))
+const NewPostPage = React.lazy(() => import('./screens/NewPostPage'))
 import * as utils from './utils';
 
 const Routes = [

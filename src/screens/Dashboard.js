@@ -7,8 +7,8 @@ import gql from 'graphql-tag';
 import { PostContext } from '../contexts/post/postReducer';
 import { UserContext } from '../contexts/user/userReducer';
 import * as ActionTypes from '../contexts/post/postActionTypes';
-import SearchBar from '../components/SearchBar';
-import PostItem from '../components/PostItem';
+const SearchBar = React.lazy(() => import('../components/SearchBar'));
+const PostItem = React.lazy(() => import('../components/PostItem'));
 import postsApi from '../api/posts/postApi';
 import * as utils from '../utils';
 

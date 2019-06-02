@@ -3,7 +3,7 @@ import { Container, Segment, Header, Image, Icon, Loader, FormField, Input } fro
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import * as utils from '../utils';
-import CommentSection from '../components/CommentSection';
+const CommentSection = React.lazy(() => import('../components/CommentSection'))
 import postApi from '../api/posts/postApi';
 import postPlaceholder from '../postPlaceholder.jpg';
 import { UserContext } from '../contexts/user/userReducer';

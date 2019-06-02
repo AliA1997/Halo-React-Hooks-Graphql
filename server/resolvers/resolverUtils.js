@@ -1,7 +1,7 @@
 const utils = require('../utils/index');
 module.exports = {
-    getReferenceValue: function(doc, refKey) {
-        return doc[refKey].get()
+    getReferenceValue: function(db, doc, refKey) {
+        return db.collection('socialMedia').doc(doc[refKey]).get()
             .then(function(ref) {
                 const socialMedia = ref.data();
                 return new utils.InputWrapper(
